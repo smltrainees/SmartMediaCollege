@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Smart Media College Thrissur — Redesign Preview</title>
+    <style>
+        /* DESIGN TOKENS — sampled from the live-site screenshot: blue #05599e, navy #033e82, link blue #107fc9, gold #ffbb10 / #dba531, red #c70206, heading #414042. */
+        :root {
+            --brand: #05599e;
+            --brand-2: #033e82;
+            --accent: #ffbb10;
+            --gold: #dba531;
+            --red: #c70206;
+            --link: #107fc9;
+            --bg: #f5f5f5;
+            --surface: #fff;
+            --text: #414042;
+            --muted: #5f5f62;
+            --line: #e1e1e1;
+            --hero-a: #033e82;
+            --hero-b: #05599e;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px)
+        }
+
+        /* Dark mode: follows the device unless the user picked light */
+        @media (prefers-color-scheme:dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #0e1117;
+                --surface: #171b24;
+                --text: #eceef3;
+                --muted: #9aa1b2;
+                --line: #2a3040;
+                --brand: #4aa3e8;
+                --accent: #ffbb10;
+            }
+        }
+
+        /* Dark mode: when the user clicks the switch */
+        :root[data-theme="dark"] {
+            --bg: #0e1117;
+            --surface: #171b24;
+            --text: #eceef3;
+            --muted: #9aa1b2;
+            --line: #2a3040;
+            --brand: #4aa3e8;
+            --accent: #ffbb10;
+        }
+
+        :root {
+            color-scheme: light
+        }
+
+        :root[data-theme="dark"] {
+            color-scheme: dark
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-padding-top: 70px;
+            scroll-behavior: smooth
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            /* font: 16px/1.6 Georgia, 'Times New Roman', serif */
+            font: 16px/1.6 sans-serif, serif
+        }
+
+        h1,
+        h2,
+        h3,
+        nav,
+        button,
+        .btn,
+        .tag {
+            font-family: 'Helvetica Neue', Arial, sans-serif
+        }
+
+        a {
+            color: inherit
+        }
+
+        .wrap {
+            max-width: 1120px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        .bar {
+            background: var(--accent);
+            color: #111;
+            font: 600 13px Arial;
+            text-align: center;
+            padding: 8px 12px
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: var(--surface);
+            /* background: #00000080; */
+            border-bottom: 1px solid var(--line)
+        }
+
+        header .wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 62px;
+            gap: 12px;
+        }
+
+        .logo {
+            font: 800 20px Arial;
+            letter-spacing: -.5px;
+            text-decoration: none;
+            color: var(--brand)
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--muted);
+            white-space: nowrap
+        }
+
+        nav a:hover {
+            color: var(--text)
+        }
+
+        .util {
+            background: var(--surface);
+            border-bottom: 1px solid var(--line);
+            font: 12px Arial;
+            color: var(--muted)
+        }
+
+        .util .wrap {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px 16px;
+            flex-wrap: wrap;
+            padding: 6px 20px
+        }
+
+        .util a {
+            color: var(--link);
+            text-decoration: none;
+            margin-right: 10px
+        }
+
+        .dd {
+            position: relative
+        }
+
+        .dd>button {
+            background: none;
+            border: 0;
+            font: inherit;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 0
+        }
+
+        .dd>button:after {
+            content: " \25be"
+        }
+
+        .dd>button:hover {
+            color: var(--text)
+        }
+
+        .dd .m {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: -12px;
+            min-width: 210px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            box-shadow: 0 10px 24px #0002;
+            padding: 8px;
+            z-index: 30
+        }
+
+        .dd:hover .m,
+        .dd.open .m {
+            display: block
+        }
+
+        .dd .m a {
+            display: block;
+            padding: 7px 10px;
+            border-radius: 6px
+        }
+
+        .dd .m a:hover {
+            background: var(--bg)
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: #111;
+            font-weight: 700;
+            padding: 11px 22px;
+            border-radius: 999px;
+            text-decoration: none;
+            border: 0;
+            cursor: pointer;
+            font-size: 15px
+        }
+
+        .btn.ghost {
+            background: transparent;
+            color: #fff;
+            border: 1.5px solid #fff8
+        }
+
+        .hero {
+            background: linear-gradient(120deg, var(--hero-a), var(--hero-b));
+            color: #fff;
+            padding: 84px 0 72px;
+            position: relative;
+            overflow: hidden;
+            padding-top: 12%;
+            transform: translateY(-63px);
+        }
+
+        .hero:after {
+            content: "";
+            position: absolute;
+            right: -80px;
+            top: -60px;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: .16
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 6vw, 68px);
+            line-height: 1.05;
+            margin: 0 0 18px;
+            letter-spacing: -1.5px;
+            max-width: 760px
+        }
+
+        .hero p {
+            max-width: 560px;
+            color: #dbe2f5;
+            font-size: 18px
+        }
+
+        .hero .row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 26px;
+            position: relative;
+            z-index: 1
+        }
+
+        section {
+            padding: 64px 0
+        }
+
+        h2 {
+            font-size: clamp(26px, 3.6vw, 38px);
+            letter-spacing: -.8px;
+            margin: 0 0 10px
+        }
+
+        .sub {
+            color: var(--muted);
+            margin: 0 0 32px;
+            max-width: 620px
+        }
+
+        .grid {
+            display: grid;
+            gap: 18px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr))
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform .2s, box-shadow .2s;
+            text-decoration: none
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px #0002
+        }
+
+        .thumb {
+            aspect-ratio: 16/10;
+            display: flex;
+            align-items: flex-end;
+            padding: 12px;
+            color: #fff;
+            font: 700 12px Arial;
+            letter-spacing: .5px;
+            position: relative;
+            overflow: hidden
+        }
+
+        details.lg {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 6px 20px;
+            margin: 16px 0
+        }
+
+        details.lg summary {
+            font: 700 20px Arial;
+            cursor: pointer;
+            padding: 12px 0
+        }
+
+        .card .b {
+            padding: 16px 18px 20px
+        }
+
+        .card h3 {
+            margin: 0 0 6px;
+            font-size: 18px
+        }
+
+        .card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14.5px
+        }
+
+        .tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--link);
+            text-transform: uppercase;
+            letter-spacing: 1px
+        }
+
+        .asym {
+            display: grid;
+            gap: 18px;
+            grid-template-columns: 1.4fr 1fr
+        }
+
+        .stat {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+            margin-top: 20px
+        }
+
+        .stat b {
+            font: 800 34px Arial;
+            color: var(--brand);
+            display: block
+        }
+
+        .quote {
+            padding: 20px
+        }
+
+        .quote p {
+            font-size: 15px;
+            margin: 0 0 12px
+        }
+
+        .av {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--brand);
+            color: #fff;
+            display: inline-grid;
+            place-items: center;
+            font: 700 14px Arial;
+            margin-right: 10px
+        }
+
+        .cta {
+            background: var(--brand-2);
+            color: #fff;
+            border-radius: 20px;
+            padding: 44px;
+            text-align: center
+        }
+
+        .note {
+            font: 13px Arial;
+            color: var(--muted);
+            border-left: 3px solid var(--accent);
+            padding: 6px 12px;
+            margin: 16px 0
+        }
+
+        footer {
+            background: var(--brand-2);
+            color: #c9cfdf;
+            padding: 44px 0 24px;
+            font-size: 14px
+        }
+
+        footer .grid {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+        }
+
+        footer h4 {
+            color: #fff;
+            margin: 0 0 8px;
+            font-family: Arial
+        }
+
+        footer a {
+            display: block;
+            text-decoration: none;
+            padding: 2px 0
+        }
+
+        label {
+            display: block;
+            font: 600 14px Arial;
+            margin: 12px 0 4px
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text);
+            font: 15px Arial
+        }
+
+        .view {
+            display: none
+        }
+
+        .view.on {
+            display: block;
+            animation: viewIn .45s ease both
+        }
+
+        @keyframes viewIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(28px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes grad {
+
+            0%,
+            100% {
+                background-position: 0 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+        }
+
+        @keyframes float {
+            50% {
+                transform: translateY(-24px) scale(1.06)
+            }
+        }
+
+        @keyframes ddIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        #pg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0;
+            background: var(--accent);
+            z-index: 60;
+            transition: width .1s linear
+        }
+
+        header {
+            transition: box-shadow .3s
+        }
+
+        header.scrolled {
+            box-shadow: 0 6px 22px #0002
+        }
+
+        .rv {
+            opacity: 0
+        }
+
+        .rv.in {
+            opacity: 1;
+            animation: rise .7s cubic-bezier(.2, .7, .2, 1) var(--d, 0s) backwards
+        }
+
+        .hero {
+            background-size: 180% 180%;
+            animation: grad 16s ease infinite;
+            height: 100vh;
+        }
+
+        .hero:after {
+            animation: float 8s ease-in-out infinite
+        }
+
+        .hero:before {
+            content: "";
+            position: absolute;
+            left: -70px;
+            bottom: -100px;
+            width: 320px;
+            height: 320px;
+            border: 2px solid #fff3;
+            border-radius: 50%;
+            animation: float 11s ease-in-out infinite
+        }
+
+        .hero .tag,
+        .hero h1,
+        .hero p,
+        .hero .row {
+            animation: rise .8s cubic-bezier(.2, .7, .2, 1) backwards
+        }
+
+        .hero h1 {
+            animation-delay: .12s
+        }
+
+        .hero p {
+            animation-delay: .26s
+        }
+
+        .hero .row {
+            animation-delay: .4s
+        }
+
+        .btn {
+            transition: transform .2s, box-shadow .2s
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px #0003
+        }
+
+        .thumb svg {
+            transition: transform .5s cubic-bezier(.2, .7, .2, 1)
+        }
+
+        .card:hover .thumb svg,
+        .thumb:hover svg {
+            transform: scale(1.18) rotate(-5deg)
+        }
+
+        .dd:hover .m,
+        .dd.open .m {
+            animation: ddIn .18s ease both
+        }
+
+        main {
+            z-index: -1000;
+            /* transform: translateY(-120px); */
+            /* position: relative;
+            top: 0px; */
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            html {
+                scroll-behavior: auto
+            }
+
+            *,
+            *:before,
+            *:after {
+                animation: none !important;
+                transition: none !important
+            }
+
+            .rv {
+                opacity: 1
+            }
+        }
+
+        ul.chk {
+            padding-left: 18px;
+            color: var(--muted)
+        }
+
+        @media(max-width:760px) {
+            .asym {
+                grid-template-columns: 1fr
+            }
+
+            header .wrap {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 10px 20px
+            }
+
+            nav {
+                order: 3;
+                width: 100%
+            }
+
+            .dd .m {
+                position: static;
+                box-shadow: none
+            }
+
+            .hero {
+                padding: 56px 0
+            }
+        }
+
+        .tt {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            padding: 0;
+            transition: transform .3s
+        }
+
+        .tt:hover {
+            transform: rotate(20deg)
+        }
+
+        .tt:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px
+        }
+
+        .tt svg {
+            width: 20px;
+            height: 20px
+        }
+
+        .theme-anim,
+        .theme-anim * {
+            transition: background-color .35s, color .35s, border-color .35s !important
+        }
+
+        .logo img {
+            /* background: #fff; */
+            border-radius: 8px;
+            padding: 3px 8px
+        }
+
+        /* keeps the logo readable in dark mode */
+    
+        /* ===== RESPONSIVE SETUP (desktop >=1400, laptop 1081-1399, tablet 721-1080, phone <=720) ===== */
+        img, svg, video { max-width: 100% }
+        body { overflow-wrap: break-word; -webkit-text-size-adjust: 100% }
+        .wrap { padding-inline: max(clamp(16px, 4vw, 32px), env(safe-area-inset-left), env(safe-area-inset-right)) }
+        .grid { grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)) }
+        footer .grid { grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)) }
+        header .wrap { height: auto; min-height: 68px; padding-block: 6px }
+        .logo img { height: clamp(42px, 6vw, 65px) !important; max-width: 100% }
+        .hero { transform: none; height: auto; min-height: calc(100svh - 150px); padding: clamp(56px, 9vw, 120px) 0; display: flex; align-items: center }
+        .hero > .wrap { width: 100% }
+        main { z-index: auto }
+        section { padding: clamp(40px, 7vw, 64px) 0 }
+        .cta { padding: clamp(24px, 5vw, 44px) }
+        details.lg { padding: 6px clamp(14px, 3vw, 20px) }
+        .dd:nth-of-type(4) .m { left: auto; right: -12px }
+        .nb { display: none; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; padding: 0; flex-direction: column; align-items: center; justify-content: center; gap: 5px }
+        .nb span { display: block; width: 20px; height: 2px; background: var(--text); border-radius: 2px; transition: transform .25s, opacity .2s }
+        header.open .nb span:nth-child(1) { transform: translateY(7px) rotate(45deg) }
+        header.open .nb span:nth-child(2) { opacity: 0 }
+        header.open .nb span:nth-child(3) { transform: translateY(-7px) rotate(-45deg) }
+        .nav-apply { display: none }
+        .thumb { width: 100%; max-width: 100%; min-width: 0 }
+        .asym > *, .grid > * { min-width: 0 }
+        @media (min-width: 1400px) { .wrap { max-width: 1240px } }
+        @media (max-width: 1280px) { nav { gap: 16px } }
+        @media (max-width: 1080px) {
+            header .wrap { flex-wrap: wrap }
+            header .wrap > div { margin-left: auto }
+            .nb { display: flex }
+            nav { display: flex; order: 4; width: 100%; flex-direction: column; align-items: stretch; gap: 0; font-size: 16px;
+                border-top: 1px solid transparent; margin-top: 0; padding: 0; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transform: translateY(-10px);
+                transition: max-height .45s cubic-bezier(.2, .7, .2, 1), opacity .3s ease, transform .4s cubic-bezier(.2, .7, .2, 1), margin .3s, padding .3s, border-color .3s, visibility 0s linear .45s }
+            header.open nav { max-height: calc(100svh - 150px); overflow-y: auto; opacity: 1; visibility: visible; transform: none; border-top-color: var(--line); margin-top: 6px; padding: 6px 0 10px;
+                transition: max-height .45s cubic-bezier(.2, .7, .2, 1), opacity .3s ease, transform .4s cubic-bezier(.2, .7, .2, 1), margin .3s, padding .3s, border-color .3s, visibility 0s }
+            nav > * { opacity: 0; transform: translateY(-8px); transition: opacity .25s ease, transform .3s ease }
+            header.open nav > * { opacity: 1; transform: none; transition: opacity .35s ease calc(var(--i, 0) * 45ms + 120ms), transform .4s cubic-bezier(.2, .7, .2, 1) calc(var(--i, 0) * 45ms + 120ms) }
+            nav > *:nth-child(2) { --i: 1 } nav > *:nth-child(3) { --i: 2 } nav > *:nth-child(4) { --i: 3 } nav > *:nth-child(5) { --i: 4 } nav > *:nth-child(6) { --i: 5 } nav > *:nth-child(7) { --i: 6 } nav > *:nth-child(8) { --i: 7 }
+            nav > a, .dd > button { display: block; width: 100%; text-align: left; padding: 12px 4px; border-bottom: 1px solid var(--line) }
+            .dd > button:after { float: right }
+            .dd .m { position: static; display: block !important; box-shadow: none; border: 0; background: transparent; min-width: 0; padding: 0 0 0 14px; animation: none;
+                max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height .35s cubic-bezier(.2, .7, .2, 1), opacity .25s ease, padding .25s, visibility 0s linear .35s }
+            .dd.open .m { max-height: 420px; opacity: 1; visibility: visible; padding-bottom: 6px; transition: max-height .35s cubic-bezier(.2, .7, .2, 1), opacity .3s ease .05s, padding .25s, visibility 0s }
+            .dd > button:after { display: inline-block; transition: transform .3s ease }
+            .dd.open > button:after { transform: rotate(180deg) }
+            .dd:nth-of-type(4) .m { right: auto }
+        }
+        @media (max-width: 900px) {
+            .asym { grid-template-columns: 1fr }
+            .hero h1 { letter-spacing: -1px }
+        }
+        @media (max-width: 720px) {
+            .bar { font-size: 12px }
+            .util .wrap { justify-content: center; text-align: center }
+            .hero p { font-size: 16px }
+            .stat { gap: 18px 24px }
+            .stat b { font-size: 28px }
+            input, select, textarea { font-size: 16px }
+            footer .grid { grid-template-columns: 1fr 1fr }
+            details.lg summary { font-size: 17px }
+        }
+        @media (max-width: 480px) {
+            .hero .row .btn { flex: 1 1 100%; text-align: center }
+            footer .grid { grid-template-columns: 1fr }
+            .btn { padding: 11px 18px }
+        }
+        @media (max-width: 420px) {
+            .hd-apply { display: none }
+            .nav-apply { display: block; text-align: center; margin: 10px 0 2px }
+        }
+        @media (pointer: coarse) { .btn, .tt, .nb, nav a, .dd > button { min-height: 44px } .btn { display: inline-flex; align-items: center; justify-content: center } }
+    </style>
+</head>
+
+<body>
+    <div id="pg"></div>
+    <div class="bar">Applications invited for the Smart 2027 scholarship program — <a href="https://smart-2026.com/"
+            target="_blank" rel="noopener">Apply now</a></div>
+    <div class="util">
+        <div class="wrap"><span><a href="https://www.facebook.com/smartmediacollege">Facebook</a><a
+                    href="https://www.youtube.com/c/SmartMediaCollege">YouTube</a><a
+                    href="https://www.instagram.com/smartmediacollege">Instagram</a><a
+                    href="https://www.linkedin.com/company/smart-media-college/">LinkedIn</a></span><span>Helplines <a
+                    href="tel:+919946998888">+91 99469 98888</a>, <a href="tel:+918547998888">85479 98888</a> | <a
+                    href="#/verify">Certificate Verification</a> | <a href="#/contact">Brochure enquiry</a></span></div>
+    </div>
+    <header>
+        <div class="wrap"><a class="logo" href="#/" aria-label="Smart Media College home"><img
+                    src="SMC_LOGO.png"
+                    style="height:65px;width:auto;display:block"></a>
+            <nav id="mainnav"><a href="#/">Home</a>
+                <div class="dd"><button type="button">About Us</button>
+                    <div class="m"><a href="#/page/about">Know Us</a><a href="#/page/principal">Principal's Desk</a><a
+                            href="#/page/celebrity">Celebrity Talks</a><a href="#/page/specialities">Our
+                            Specialities</a><a href="#/page/vision">Vision &amp; Mission</a></div>
+                </div>
+                <div class="dd"><button type="button">Courses</button>
+                    <div class="m"><a href="#/courses">Smart Courses</a><a href="#/course/pdma">PDMA Scholarship
+                            Program</a><a href="#/course/graphic">Graphic Design</a><a href="#/course/web">Web
+                            Design</a><a href="#/course/vfx">VFX</a><a href="#/course/interior">Interior Design</a><a
+                            href="#/course/bsc">BSc Visual Communication</a></div>
+                </div>
+                <div class="dd"><button type="button">Campus</button>
+                    <div class="m"><a href="#/page/campus">Smart Campus</a><a href="#/page/projects">Projects</a><a
+                            href="#/page/activities">Activities</a><a href="#/page/life">Life@Smart</a><a
+                            href="#/page/jobs">Smart Jobs</a><a href="#/page/feedback">Student Feedback</a></div>
+                </div>
+                <div class="dd"><button type="button">Smart Plus</button>
+                    <div class="m"><a href="#/page/plus">Smart Exchange</a><a href="#/page/excel">Smart Excel</a><a
+                            href="#/page/connect">Smart Connect</a><a href="#/page/care">Smart Care</a></div>
+                </div>
+                <a href="https://online.pubhtml5.com/doylj/ikqu/" target="_blank" rel="noopener">Smart Voices</a><a
+                    href="#/contact">Contact</a>
+            <a class="btn nav-apply" href="https://smart-2026.com/" target="_blank" rel="noopener">Apply Now</a></nav>
+            <div style="display:flex;gap:10px;align-items:center">
+                <button id="tt" class="tt" type="button" aria-label="Switch to dark theme"
+                    aria-pressed="false"></button>
+                <a class="btn hd-apply" href="https://smart-2026.com/" target="_blank" rel="noopener">Apply Now</a>
+                <button id="nb" class="nb" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mainnav"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="view" id="v-home">
+            <div class="hero">
+                <div class="wrap"><span class="tag" style="color:var(--accent)">27th Year Anniversary · Thrissur,
+                        Kerala</span>
+                    <h1>Turn Your Creativity Into Your Career.</h1>
+                    <p>Discover your potential through practical learning in multimedia, animation, graphic design, web
+                        design, VFX, and visual communication.</p>
+                    <div class="row"><a class="btn" href="#/courses">Explore Our Courses</a><a class="btn ghost"
+                            href="https://smart-2026.com/" target="_blank" rel="noopener">Apply Now</a></div>
+                </div>
+            </div>
+
+            <section>
+                <div class="wrap">
+                    <h2>Creative disciplines</h2>
+                    <p class="sub">Image-led entry points into each program. Gradient panels are placeholders for
+                        approved photography.</p>
+                    <div class="grid" id="disc"></div>
+                </div>
+            </section>
+
+            <section style="background:var(--surface)">
+                <div class="wrap asym">
+                    <div><span class="tag">Why Smart</span>
+                        <h2>Industry-ready, not just classroom-ready.</h2>
+                        <p class="sub" style="margin-bottom:0">Graduates describe real-world projects, career guidance
+                            and faculty support. Smart says more than 30,000 students have completed training and been
+                            placed.</p>
+                        <div class="stat">
+                            <div><b data-n="26">26</b>years of Smart</div>
+                            <div><b data-n="30000" data-s="+">30,000+</b>students placed (college claim)</div>
+                            <div><b data-n="2500">2,500</b>free CMT seats / year</div>
+                        </div>
+                    </div>
+                    <div class="thumb" data-k="cam"
+                        style="background:linear-gradient(135deg,#ffbb10,#05599e);border-radius:16px;min-height:240px">
+                        DEMO IMAGE · LEARNING ENVIRONMENT</div>
+                </div>
+            </section>
+
+            <section>
+                <div class="wrap">
+                    <h2>Featured programs</h2>
+                    <div class="grid" id="feat"></div>
+                </div>
+            </section>
+
+            <section>
+                <div class="wrap">
+                    <h2>Student projects</h2>
+                    <p class="sub">Demonstration work, clearly labelled. Replace with approved student projects before
+                        launch.</p>
+                    <div class="grid" id="proj"></div>
+                </div>
+            </section>
+            <section style="background:var(--surface)">
+                <div class="wrap">
+                    <h2>Learning environment</h2>
+                    <p class="sub">Demo imagery to be replaced with real campus photos.</p>
+                    <div class="grid" id="env"></div>
+                </div>
+            </section>
+            <section>
+                <div class="wrap">
+                    <h2>News &amp; events</h2>
+                    <div id="news"></div>
+                </div>
+            </section>
+            <section style="background:var(--surface)">
+                <div class="wrap">
+                    <h2>Student stories</h2>
+                    <p class="sub">Real feedback from the existing website (photos to be re-supplied from the original
+                        assets).</p>
+                    <div class="grid" id="stories"></div>
+                </div>
+            </section>
+
+            <section>
+                <div class="wrap">
+                    <div class="cta">
+                        <h2>Smart 2027 scholarship applications are open</h2>
+                        <p style="color:#c9cfdf">You'll be taken to the college's official application portal,
+                            smart-2027.com.</p><a class="btn" href="https://smart-2026.com/" target="_blank"
+                            rel="noopener">Apply on smart-2027.com ↗</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="view" id="v-courses">
+            <section>
+                <div class="wrap">
+                    <h2>All courses</h2>
+                    <p class="sub">Current catalogue as listed on the existing site.</p>
+                    <div class="grid" id="all"></div>
+                </div>
+            </section>
+        </div>
+        <div class="view" id="v-course">
+            <section>
+                <div class="wrap" id="cdet"></div>
+            </section>
+        </div>
+
+        <div class="view" id="v-page">
+            <section>
+                <div class="wrap" id="pdet" style="max-width:820px"></div>
+            </section>
+        </div>
+        <div class="view" id="v-status">
+            <section>
+                <div class="wrap" id="sdet"></div>
+            </section>
+        </div>
+        <div class="view" id="v-verify">
+            <section>
+                <div class="wrap" style="max-width:640px">
+                    <h2>Certificate verification</h2>
+                    <p class="sub">The existing site collects certificate number, issue date, purpose, name, phone and
+                        email, and checks them against the college's own backend.</p>
+                    <div class="note">This preview does not verify certificates and shows no result. Use the college's
+                        live verification service.</div>
+                    <a class="btn" href="http://www.smartinfoprism.com/Verify" target="_blank" rel="noopener">Open
+                        official verification ↗</a>
+                </div>
+            </section>
+        </div>
+
+        <div class="view" id="v-contact">
+            <section>
+                <div class="wrap asym">
+                    <div>
+                        <h2>Contact</h2>
+                        <p><b>Administrative Office &amp; Training Division</b><br>Chicago Tower, 2nd &amp; 3rd Floor,
+                            Ikkandawarrier Road, Near Malayala Manorama, Thrissur, Kerala 680001</p>
+                        <p><b>Development Division</b><br>Devadaram, Infopark, Koratty, Thrissur 680308</p>
+                        <p>Office: <a href="tel:+914872995333">+91 487 2995333</a><br>Helplines: <a
+                                href="tel:+919946998888">+91 99469 98888</a>, <a href="tel:+918547998888">+91 85479
+                                98888</a><br><a
+                                href="mailto:mail@smartmediacollege.com">mail@smartmediacollege.com</a><br>Website: <a
+                                href="https://smartmediacollege.com">smartmediacollege.com</a></p>
+                    </div>
+                    <div>
+                        <h3>Send an enquiry</h3>
+                        <div class="note">No backend is connected in this preview, so the button opens your email app
+                            instead of claiming to submit.</div>
+                        <label for="n">Name</label><input id="n"><label for="e">Email</label><input id="e"
+                            type="email"><label for="s">Subject</label><input id="s"><label for="p">Contact
+                            number</label><input id="p" inputmode="tel"><label for="m">Message</label><textarea id="m"
+                            rows="3"></textarea>
+                        <p id="err" style="color:#c0392b;font:14px Arial;min-height:20px"></p><button class="btn"
+                            id="send">Email the college</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="wrap">
+            <div class="grid">
+                <div>
+                    <h4>smartmediacollege</h4>Chicago Tower, Ikkanda Warrier Road, Thrissur 680001
+                </div>
+                <div>
+                    <h4>Programs</h4><a href="#/courses">All courses</a><a href="https://smart-2026.com/"
+                        target="_blank" rel="noopener">Smart Care ↗</a><a href="http://www.smartlearning-program.com/"
+                        target="_blank" rel="noopener">CMT ↗</a>
+                </div>
+                <div>
+                    <h4>College</h4><a href="#/page/about">About</a><a href="#/page/vision">Vision &amp; Mission</a><a
+                        href="#/page/jobs">Smart Jobs</a><a href="#/page/privacy">Privacy &amp; Terms</a><a
+                        href="#/status">Page status</a>
+                </div>
+                <div>
+                    <h4>Follow</h4><a href="https://www.facebook.com/smartmediacollege">Facebook</a><a
+                        href="https://www.instagram.com/smartmediacollege">Instagram</a><a
+                        href="https://www.youtube.com/c/SmartMediaCollege">YouTube</a><a
+                        href="https://www.linkedin.com/company/smart-media-college/">LinkedIn</a>
+                </div>
+            </div>
+            <p style="margin-top:28px;opacity:.7">© Smart Media College Thrissur · Redesign preview, not the live site
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        const SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+            MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+        const root = document.documentElement, tt = document.getElementById("tt"),
+            mq = matchMedia("(prefers-color-scheme:dark)");
+        let saved = null; try {saved = localStorage.getItem("smc-theme")} catch (e) { }
+        function applyTheme(t, save, anim) {
+            if (anim) {root.classList.add("theme-anim"); setTimeout(() => root.classList.remove("theme-anim"), 450)}
+            root.dataset.theme = t;
+            tt.setAttribute("aria-pressed", String(t === "dark"));
+            tt.setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
+            tt.innerHTML = t === "dark" ? SUN : MOON;
+            if (save) {saved = t; try {localStorage.setItem("smc-theme", t)} catch (e) { } }
+        }
+        applyTheme(saved || (mq.matches ? "dark" : "light"), false, false);
+        tt.onclick = () => applyTheme(root.dataset.theme === "dark" ? "light" : "dark", true, true);
+        mq.addEventListener && mq.addEventListener("change", e => {if (!saved) applyTheme(e.matches ? "dark" : "light", false, true)});
+        const C = [
+            {id: "pdma", n: "PDMA — Professional Diploma in Multimedia & Animation", s: "Scholarship program", d: "Industry-focused design course giving a solid foundation in the basics of multimedia and animation. Invites applications for its 22nd batch.", g: "#1f3a8a,#f59e0b", ext: "https://smart-2026.com/"},
+            {id: "graphic", n: "Diploma in Graphic Design", s: "Specialization", d: "A specialization course in Thrissur to become a graphic design specialist.", g: "#7c3aed,#f59e0b"},
+            {id: "web", n: "Diploma in Web Design", s: "Specialization", d: "Trains students in both design and development of websites, with technology updates.", g: "#0f766e,#1f3a8a"},
+            {id: "vfx", n: "Diploma in VFX", s: "Specialization", d: "Trains students in the post-production work of visual media.", g: "#be123c,#0f172a"},
+            {id: "interior", n: "Diploma in Interior Design", s: "Short-term, job oriented", d: "From CAD drawing to 3D visuals, covering the essentials of civil architecture and interior design.", g: "#b45309,#0f172a"},
+            {id: "cmt", n: "CMT — Certificate in Multimedia Technology", s: "Smart Learning Program", d: "An annual free multimedia training program for 2,500 selected candidates, run with Deepika.", g: "#0369a1,#f59e0b", ext: "http://www.smartlearning-program.com/"},
+            {id: "care", n: "Smart Care Job Oriented Program", s: "1 year", d: "A one-year job-oriented program combining academic and professional training.", g: "#15803d,#1f3a8a", ext: "http://www.smart-2026.com/"}];
+        const T = [["Vishnu CM", "3D Designer, Dubai, UAE", "Secured a 3D Designer placement in Dubai; credits real-world projects and career guidance."], ["Jithin Kuriakose", "Lighting Supervisor, Webros Animations, Kochi", "Completed PDMA and is now a Lighting Supervisor with 10 years in the industry."], ["Tiny Edwin", "Compositor, Xentrix Studios, Bangalore", "Praises the friendly environment and systematic approach."], ["Febin Kolambrath", "3D Character Animator, Xentrix Studios", "Says mentors helped him find his hidden talents."], ["Jinith Kishore", "Texturing & Lookdev Artist, MPC Film", "Credits faculty support for his career."], ["Sijo Thomas", "Sr Animator, PhilmCGI, Thrissur", "Learned from the best faculty and was placed in a reputed firm."]];
+        const L = "https://smartmediacollege.com/";
+        C.push({id: "bsc", n: "BSc Degree in Visual Communication", s: "Degree", d: "A course covering all facets of communication design, with industry connection throughout and regular exhibitions, including a final-year exhibition.", g: "#4338ca,#f59e0b"});
+        const H = ["High-end equipment with latest cameras and studio essentials", "Training by skilled faculty", "Real-time training in print, visual, advertising and film making", "E-Library", "Training in leading media houses", "Training for setting up a business"];
+        const PAL = ["#033e82,#05599e", "#05599e,#107fc9", "#033e82,#ffbb10", "#05599e,#dba531"]; C.forEach((c, i) => c.g = PAL[i % 4]);
+        const K = {pdma: "pdma", graphic: "gfx", web: "web", vfx: "vfx", interior: "int", cmt: "edu", care: "edu", bsc: "edu"}; C.forEach(c => c.k = K[c.id]);
+        function art(k) {const p = {gfx: '<path d="M12 44C20 12 36 12 28 30s16 6 22-14"/>', web: '<path d="M18 16L6 28l12 12M42 16l12 12-12 12M34 12l-8 32"/>', vfx: '<path d="M20 12v32l28-16z"/>', pdma: '<path d="M30 8l20 11v22L30 52 10 41V19zM10 19l20 11 20-11M30 30v22"/>', int: '<path d="M8 28L30 8l22 20M14 26v22h32V26M26 48V34h8v14"/>', edu: '<path d="M30 12L6 24l24 12 24-12zM14 30v10c8 8 24 8 32 0V30"/>', cam: '<rect x="8" y="16" width="44" height="30" rx="4"/><circle cx="30" cy="31" r="9"/>', people: '<circle cx="22" cy="22" r="7"/><circle cx="42" cy="24" r="6"/><path d="M8 48c2-12 24-12 28 0M34 46c2-8 18-8 20 0"/>', star: '<path d="M30 8l7 15 16 2-12 11 3 16-14-8-14 8 3-16L7 25l16-2z"/>'}[k] || ''; return `<svg viewBox="0 0 60 56" aria-hidden="true" style="position:absolute;inset:0;margin:auto;width:30%;opacity:.85" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`}
+        function fillHome() {
+            const t = (k, g, l) => `<div class="thumb" data-k="${k}" style="background:linear-gradient(135deg,${g});border-radius:14px">${l}</div>`;
+            $("proj").innerHTML = [["gfx", "Digital illustration"], ["pdma", "3D model"], ["vfx", "Animation still"], ["web", "Web design"], ["vfx", "Motion graphics"], ["cam", "VFX compositing"]].map((x, i) => t(x[0], PAL[i % 4], "DEMO WORK · " + x[1])).join("");
+            $("env").innerHTML = ["Computer lab", "Studio", "Classroom"].map((x, i) => t("cam", PAL[(i + 1) % 4], "DEMO · " + x)).join("");
+            $("news").innerHTML = ["Smart Media College provides industrial training programs in design and development of web media and post production works of visual media.", "Applications are invited for Smart 2027 scholarship program from the eligible candidates."].map(x => `<div class="note" style="font-size:15px">${x}</div>`).join("")
+        }
+        const D = {
+            pdma: {hl: 1, dur: "1 year 6 months", obj: "Applications are invited for the 22nd batch. Project-oriented training and case studies, plus spoken English, personality development and seminars by film-industry technicians and directors. The college lists 14+ career packages and 40+ job opportunities, and a SMART scholarship of ₹1 lakh for 1,000 selected applicants.", proj: ["Digital Illustrations", "Advanced Digital Imaging", "Layout for publication design", "Prepress & Production"]},
+            graphic: {hl: 1, dur: "6 months", obj: "Apply design principles to product branding and advertising, with hands-on training in print applications, typography and colour sense, and a Prepress module covering offset and digital.", tools: ["Adobe Illustrator", "Adobe Photoshop", "Adobe InDesign", "Adobe Lightroom", "CorelDRAW"]},
+            web: {hl: 1, dur: "6 months", obj: "Navigation and interactive design, web programming, advanced PHP, frameworks, responsive HTML5/CSS3 and internet marketing including SEO, through workshops, group exercises and live projects. Advanced students intern with the college's production wing, Info Prism Solutions Pvt Ltd.", tools: ["Adobe Dreamweaver", "Bootstrap 4", "jQuery Ajax", "PHP MySQL", "Laravel"]},
+            vfx: {hl: 1, dur: "6 months", obj: "Video editing in Final Cut Pro and special effects with compositing software such as After Effects and Photoshop, through hands-on training. The certification takes about 4 to 6 months.", tools: ["Adobe Premiere Pro", "Adobe After Effects", "Final Cut Pro", "Adobe Audition"]},
+            interior: {hl: 1, dur: "6 months", obj: "Design appreciation, lighting and colour, and taking ideas from conceptual drawings to detailed building specifications and technical drawings.", tools: ["AutoCAD", "Autodesk 3ds Max", "Autodesk Revit"]},
+            bsc: {hl: 1, obj: "Career paths in web and multimedia design, graphic design and advertising, with job titles such as communications specialist, graphic designer, multimedia director and web designer.", car: ["Publishers", "Advertising firms", "Education institutions", "Corporations and design firms", "Graphic designer"]},
+            care: {dur: "1 year"}, cmt: {}
+        };
+        const li = a => "<ul>" + a.map(x => "<li>" + x + "</li>").join("") + "</ul>";
+        function extra(id) {const d = D[id] || {}; return (d.dur ? `<p><b>Duration:</b> ${d.dur}</p>` : "") + (d.obj ? `<h3>Objective</h3><p>${d.obj}</p>` : "") + (d.tools ? `<h3>Software tools</h3><p>${d.tools.join(" · ")}</p>` : "") + (d.proj ? `<h3>Project examples</h3>${li(d.proj)}` : "") + (d.car ? `<h3>Career options</h3>${li(d.car)}` : "") + (d.hl ? `<h3>Smart highlights</h3>${li(H)}` : "") + `<div class="note">Eligibility and fees are not stated on the pages reviewed. Confirm with the college.</div>`}
+        const P = [
+            ["about", "About Us", "Built · content verified", L + "about.php", "<p>Smart Media College is an information-technology-enabled institute in Thrissur, Kerala, working in graphic design, multimedia, visual effects, 2D and 3D animation, IT training and knowledge consulting.</p><p>It set out to develop manpower for Kerala's emerging media and entertainment sector, and launched the Smart Multimedia Scholarship Program with the Malayalam daily Malayala Manorama so talented students from average families could study media at an affordable cost in their home town.</p><p>On its 26th anniversary the college says more than 30,000 students have completed training and been placed. <small>— attributed on the live site to Regi N. Poulose, CEO.</small></p>"],
+            ["vision", "Our Vision &amp; Mission", "Built · content verified", L + "about.php", "<h3>Vision</h3><p>To be a centre of excellence in media and entertainment studies and research, upholding ethical, secular, national and democratic values, and setting global standards for media education, research, extension and training with state-of-the-art technology.</p><h3>Mission</h3><ul><li>Create a dynamic learning and working environment that nurtures ideas, creativity, research and scholarship, and develops leaders and innovators in media and entertainment.</li><li>Run workshops and seminars that link mass media and communication skills with social action, education, healthcare and sustainable development.</li></ul>"],
+            ["campus", "Smart Campus", "Built · photos pending", L + "about.php", "<p>The live site shows 18 campus and infrastructure photos. They are not embedded here; replace the panels below with the approved originals.</p><div class='grid'>" + Array.from({length: 18}, (_, i) => i + 1).map(i => `<div class='thumb' data-k='cam' style='border-radius:12px;background:linear-gradient(135deg,#033e82,#ffbb10)'>DEMO · CAMPUS ${i}</div>`).join("") + "</div>"],
+            ["principal", "Principal's Desk", "Built · content from screenshot", L + "principal-desk.php", "<blockquote style='margin:0;padding-left:18px;border-left:4px solid var(--accent)'><p>&ldquo;Students come to SMART with diverse ambitions and dreams – preparing for their chosen career, continuing their education, or transitioning into a new job. Whichever path our students select, our goal is to ensure that a SMART education opens the doorway to great opportunities. Our exciting and innovative Strategic and Academic plans are our commitment to great teaching and learning, great student experiences and great foundations — commitments we are proud to undertake on behalf of our students. Our students prepare for a life of learning in a world that continues to change with increasing speed. We strive to graduate active and engaged citizens, ready for leadership in their careers and their communities. With outstanding faculty and staff, excellent academic programs, a global perspective and a strong community, SMART is helping our students become those leaders. Whether you're a first-time or a long-time visitor, it's my pleasure on behalf of SMART family to warmly welcome you to this website. I invite you to experience first-hand why SMART is considered a leader in Multimedia and Animation.&rdquo;</p></blockquote><p style='text-align:right'><b>Mr. Regi N Poulose</b><br>Principal, Smart Media College</p>"],
+            ["celebrity", "Celebrity Talks", "Built · photos pending", L + "celebrity-talks.php", "<p>A photo gallery of guest speakers at Smart events (15 photos on the live page).</p><div class='grid'>" + Array.from({length: 15}, (_, i) => `<div class='thumb' data-k='people' style='border-radius:12px;background:linear-gradient(135deg,#033e82,#05599e)'>DEMO · SPEAKER ${i + 1}</div>`).join("") + "</div><div class='note'>The screenshot has no captions, so no speaker names are shown. Supply names and the original photos.</div>"],
+            ["specialities", "Our Specialities", "Built · content verified", L + "our-specialities.php", li(["The best multimedia &amp; animation training", "A truly global campus", "Innovative and up-to-date programs", "Well-equipped lab, library and theory sessions", "Special training in special skills", "Qualified industry-level faculty", "Personalised attention for each student", "Training based on real-time projects", "100% placement assistance", "Highly affordable and reasonable fees", "Courses designed for personal growth", "Professional excellence and career advancement"])],
+            ["projects", "Smart Projects \u00b7 Smart '26", "Built \u00b7 text supplied by college", "https://smart-2026.com/", "<div lang='ml'><p>ജോലി, പഠനം സംബന്ധിച്ച പരമ്പരാഗത കാഴ്ച്ചപ്പാടുകളെല്ലാം മാറുന്ന കാലമാണിത്. വിവരസാങ്കേതിക വിദ്യയിലെ സാധ്യതയും, സോഷ്യല്‍ മീഡിയയും അനുബന്ധ നവമാധ്യമങ്ങളും ഈ രംഗത്ത് വലിയ വിപ്ലവങ്ങളാണ് കൊണ്ടുവന്നിട്ടുള്ളത്. ഏതെങ്കിലും വിഷയത്തില്‍ ബിരുദമെടുത്ത് അതില്‍ തന്നെ ബിരുദാനന്തര ബിരുദവും പി.എച്ച്.ഡി യുമെടുത്ത് അതേ മേഖലയില്‍ തന്നെ ജോലി ചെയ്യുന്ന കാലമെല്ലാം കഴിഞ്ഞു. പഠനവിഷയങ്ങളുടെ വൈവിധ്യവും സാധ്യതകളും അവസരങ്ങളും ഇന്ന് കൂടുതലാണ്. എന്തു പഠിക്കണം എന്നുള്ള തീരുമാനമെടുക്കുന്നതാണ് ഇവിടെ പ്രാധാന്യം. സയന്‍സ്, ആര്‍ട്സ്, കൊമേഴ്‌സ് ഇവ മൂന്നുമാണ് അടിസ്ഥാന വിഷയങ്ങള്‍. ഇവയില്‍ ഇഷ്ടമുള്ള വഴിയിലേക്ക് തിരിയുകയാണ് ഉപരിപഠനത്തിലെ ആദ്യപടി. എന്നാല്‍ ബിരുദ തലത്തില്‍ പഠിച്ച അതേ വിഷയം തന്നെ തുടരണമെന്ന് കരുതുന്നവരല്ല ഇന്നത്തെ തലമുറ. എഞ്ചിനീയറിങ് കഴിഞ്ഞ് ഡിസൈനിങ്ങിലേക്ക് തിരിയുന്നവരും, ബയോടെക്‌നോളജി കഴിഞ്ഞ് നിയമം പഠിക്കുന്നവരും, സയന്‍സ് കഴിഞ്ഞ് പരസ്യമേഖല തിരഞ്ഞെടുക്കുന്നവരുമുണ്ട്. സ്ഥിരമായ ജോലി, ആജീവനാന്തകാലം അതില്‍തന്നെ നില്‍ക്കുക എന്ന ചിന്താഗതിയും പുതിയ തലമുറക്കില്ല. മനസ്സിനിണങ്ങുന്ന കരിയര്‍ അതാണ് അവരുടെ താല്പര്യം. ആഗോളീകരണവും മാറിയ ജീവിത സാഹചര്യങ്ങളും മറ്റെല്ലാ മേഖലയിലുമെന്നപോലെ കരിയര്‍ മേഖലയിലും വലിയ മാറ്റങ്ങള്‍ക്ക് കാരണമായിട്ടുണ്ട്. മള്‍ട്ടിമീഡിയ ആനിമേഷന്‍ രംഗത്ത് തൊഴില്‍ സാധ്യതകള്‍ കൂടി വരുന്ന പ്രവണതയാണ് കഴിഞ്ഞ കുറേ വര്‍ഷങ്ങളായി കണ്ടുവരുന്നത്. ഈ സാഹചര്യത്തില്‍ ആവശ്യമായ പ്രൊഫഷണലുകളുടെ അഭാവം പരിഹരിക്കുന്നതിന് ഈ മേഖലയില്‍ നിന്നുള്ള പോലുള്ള തൊഴിലധിഷ്ഠിത പഠന പദ്ധതികള്‍ വിദ്യാര്‍ത്ഥികളെ 100% സഹായിക്കുന്നു എന്നുള്ളത് നിസ്തര്‍ക്കമാണ്.</p><h3>അവസരങ്ങളുടെ വിസ്മയ ലോകം തീര്‍ത്ത് ഒരു സമഗ്ര തൊഴിലധിഷ്ഠിത പഠനപദ്ധതി</h3><p>21 വര്‍ഷം കൊണ്ട് പതിനായിരങ്ങള്‍ക്ക് ഇഷ്ട തൊഴിലും ജീവിത വിജയവും നേടി കൊടുത്ത കേരളത്തിലെ പ്രമുഖ തൊഴിലധിഷ്ഠിത പഠന പദ്ധതിയായ സ്മാര്‍ട്ട്, 26-ാം വര്‍ഷം ആഘോഷിക്കനതോടൊപ്പം പദ്ധതിയുടെ 22nd ബാച്ചിലേക്ക് അപേക്ഷ കള്‍ ക്ഷണിക്കുന്നു.</p><h3>14 ല്‍ പരം കരിയര്‍ പാക്കേജുകള്‍, 40 ല്‍ അധികം തൊഴിലവസരങ്ങള്‍</h3><p>ഐ.ടി മേഖലയിലെ വമ്പിച്ച തൊഴിലവസരങ്ങള്‍ ഉപയോഗപ്പെടുത്തുവാന്‍ പ്രാപ്തരാക്കുംവിധം പ്രൊജക്റ്റുകളില്‍ പ്രായോഗിക പരിശീലനം നടത്തുന്നതിനൊപ്പം ഇംഗ്ലീഷ് ഭാഷാ പരിജ്ഞാനം, ചലചിത്ര രംഗത്തെ പ്രമുഖ സംവിധായകരും, സാങ്കേതിക വിദഗ്ധരും നയിക്കുന്ന സെമിനാറുകള്‍, ശില്‍പശാലകള്‍ പാഠ്യേതര പ്രവര്‍ത്തനങ്ങള്‍ എന്നിങ്ങനെ കരിയര്‍ ഡെവലപ്‌മെന്റ് സാധ്യമാക്കുന്ന പ്രത്യേക പാക്കേജുകളാണ് പഠന പദ്ധതിയുടെ ഭാഗമാക്കിയിട്ടുള്ളത്.</p></div><p><a class='btn' target='_blank' rel='noopener' href='https://smart-2026.com/'>Apply Now \u2197</a></p>"],
+            ["activities", "Activities", "Built · six areas, details pending", L + "activities-gallery.php", "<p>Student activities are grouped into six areas.</p><div class='grid'>" + [["Seminars", "people"], ["Workshops", "pdma"], ["Competitions", "star"], ["Exhibitions", "cam"], ["Industrial Visits", "vfx"], ["Excursions", "edu"]].map((t, i) => `<div class='card'><div class='thumb' data-k='${t[1]}' style='background:linear-gradient(135deg,${PAL[i % 4]});aspect-ratio:16/9;font-size:15px'>${t[0]}</div></div>`).join("") + "</div><div class='note'>Panels are demo artwork; the live site uses illustrated cards. Event details for each area have not been reviewed.</div>"],
+            ["life", "Life@Smart", "Built · six sections, details pending", L + "life-smart.php", "<p>Life@Smart is organised into six areas.</p><div class='grid'>" + ["Smart Events", "Awards &amp; Recognitions", "Media", "Social Welfare", "Showcase Portfolio", "Smart Productions"].map((t, i) => `<div class='card'><div class='thumb' data-k='star' style='background:linear-gradient(135deg,${PAL[i % 4]});aspect-ratio:16/9;font-size:15px'>${t}</div></div>`).join("") + "</div><h3>Photo galleries</h3><p>The live page has year-wise photo galleries in a side menu: Smart 2007, 2008, 2009, 2010, 2011, 2012, 2013, Infopark Division and Meenakshi@Smart.</p><div class='grid'>" + Array.from({length: 8}, (_, i) => `<div class='thumb' data-k='cam' style='border-radius:12px;background:linear-gradient(135deg,${PAL[i % 4]})'>DEMO \u00b7 EVENT PHOTO ${i + 1}</div>`).join("") + "</div><div class='note'>I assume these galleries sit under Smart Events. Confirm, and supply the original photos.</div>"],
+            ["jobs", "Smart Jobs", "Built · content verified", L + "smart-jobs.php", "<p>Thank you for your interest in working at Smart Media College. There are currently no open positions, but you can send your CV for future opportunities and the college will be in touch if a matching role opens.</p><p>Send your resume as a PDF with your contact details to <a href='mailto:mail@smartmediacollege.com'>mail@smartmediacollege.com</a>. (The live site uses an upload form; this preview does not process uploads.)</p>"],
+            ["feedback", "Student Feedback", "Built · form not connected", L + "student-feedback.php", "<p>Six graduate testimonials are shown on the <a href='#/'>homepage</a>. The live page also lets alumni submit feedback through a form.</p><h3>Fields on the live form</h3>" + li(["Name, address, contact number, email", "Course studied at Smart, admission number, batch year, course completion date", "Current employer, job designation, job location, job address, current salary", "Feedback text and a photo", "Declaration that the details may be published in any media"]) + "<div class='note'>This preview has no backend, so the form is not rebuilt. It collects personal data (including salary), so it should be connected to a real, secure endpoint before launch.</div><p><a class='btn' target='_blank' rel='noopener' href='" + L + "student-feedback.php'>Open the live feedback form ↗</a></p>"],
+            ["plus", "Smart Plus / Smart Exchange", "Built · content from screenshot", L + "smart-exchange.php", "<p>Smart Plus groups four services: <b>Smart Exchange</b>, Smart Excel, Smart Connect and Smart Care. Only Smart Exchange has been reviewed.</p><h3>Smart Exchange — the placement division</h3><p>Smart Exchange is the placement division of Smart Media College, positioning itself as a placement solution provider in Kerala that finds the &ldquo;right candidates for the right job&rdquo;. It aims to give everyone with the right attitude and calibre the chance to prove themselves, with openings for IT students and candidates from other categories, and to build candidates' confidence and prepare them for interviews.</p><p>It keeps a large data bank of resumes and stays in touch with candidates, so it can match people to an employer's specifications such as competency, experience and remuneration. Tie-ups with professional and technical institutions help it supply qualified people to leading organisations.</p><h3>How it works</h3><ol><li>Register online</li><li>Create online CV</li><li>Search jobs</li><li>Apply for jobs</li><li>Get shortlisted</li><li>Receive call letter and reference letter from HR</li><li>Grooming</li><li>Attend job interview</li><li>Receive offer letter from HR</li><li>Attend exit interview</li><li>Give testimonial</li></ol><p><a class='btn' target='_blank' rel='noopener' href='https://smartmediacollege.com/smartexchange-online.com/index.php'>Search jobs ↗</a></p><div class='note'>The live page also shows recruiter logos and a testimonial slider; these need the original image files.</div>"],
+            ["voices", "Smart Voices", "External link", "https://online.pubhtml5.com/doylj/ikqu/"],
+            ["privacy", "Privacy &amp; Terms", "Built · structure only, legal text pending", L + "privacy_terms.php", "<div class='note'>Legal wording is too small to transcribe reliably from the screenshots. Headings only are shown; copy the exact text from the college before launch.</div><h3>General T&amp;C</h3>" + li(["Use of Website Content", "User Action", "Accessing the Website", "Registration", "User Information: Privacy Policy", "Information Security", "Usage of Information Provided", "Cookies", "Access to Other Websites", "Disclaimer"]) + "<h3>Online Payment T&amp;C</h3>" + li(["Key terms", "Debit/Credit Card, Bank Account Details", "No warranty", "Disclaimer and Limitation of liability", "Governing law", "Dispute Resolution", "Refund/Cancellation Policy", "Privacy Policy", "Security", "Variations to the Terms and Conditions"])],
+            ["excel", "Smart Excel", "Built · content verified", L + "smart-exchange.php", "<p>Smart Excel aims at a total transformation of students. We empower students with personality development, interview skills, professional grooming, English fluency, presentation skills, stress management and every other soft skill required for them to excel in their professional and personal lives, through Smart Excel. Students play an active role in seminars, workshops, industrial visits and live projects to acquire more professional knowledge. It is designed to add value to their academic knowledge and professional skills. Our aim is to mould our students into employable professionals. At the end of the course, students would have improved their communication skills, initiative, positive attitude, confidence along with their artistic and technical flair.</p><p>A smooth transition to the edgy, competitive world from the relatively protected academic space requires continued training in organizational skills. Employers expect candidates with better soft skills to flourish in the workspace for a longer duration nurturing quality professional relationship.</p>"],
+            ["connect", "Smart Connect", "Built · content verified", L + "smart-exchange.php", "<p>Smart Connect, a group with the former students and staff of Smart Media, offers a physical as well as digital space for the alumni to connect with each other, to relive their campus life and work on long-lasting professional relationships. It has a lot of welfare programs for the alumni and the staff. The fellowship increases a sense of belonging to a community of successful professionals, bridging the gap between the exclusivity of academics and the inclusivity of the industry.</p><p>Limitless possibilities come to life with our strong alumni network. It is a professional network of people with diverse experience creating opportunities for both alumni and current students. Mentorship programmes made available through web portals and even social media drive students to actively engage with the real-time career lives of the alumni. Proactive interaction with the former students on Facebook, LinkedIn, Twitter, Instagram sharpens the college profile and student aspirations.</p>"],
+            ["care", "Smart Care", "Built · content verified (one wording change)", L + "smart-exchange.php", "<p>We are committed to philanthropic and charitable activities to assist students who lack sufficient social and economic backing. We offer prestigious scholarships through Smart Care to deserving candidates on a merit basis. We believe that financial constraints should not let talented students from materializing their dreams. Once the financial barrier is removed, students find more time for knowledge enhancement and skill upgradation.</p><p>This mission is our social responsibility in line with our mission to create a better world with equal opportunities. We reserve 5% seats for physically challenged students and students with intellectual disabilities. In addition to the students, even their families too benefit from the charity programs of Smart Care.</p><p>Through Smart Care, we establish a long-lasting alliance with the students and staff of our college. It is about giving back to our community that has fostered our growth and ideals. We are indebted to the patronage of the community for the success of our college.</p>"]];
+        const GT = [["Use of Website Content", "The content given in the Website intends to inform the users about the college and the educational services offered by the college. The Website provides information regarding the different dimensions of the college’s educational services, including the events happening in the college and achievements of the students. All content provided in the Website, including text, images, animations, videos, digital artworks, audio files and so on are intended for personal use and for information purpose only. They are not intended for commercial use. Thus the content may not be duplicated, sold, stored, distributed, printed, displayed, published, reproduced or exploited in any way for commercial use.", "SMC reserves all the rights to change, delete or append any content in the Website, without any prior notice to the users."],
+        ["User Action", "On using this Website, a user agrees not to use any obscene or offensive language; provide any false, misleading, abusive or harassing information; provide any personal information of someone else without their prior written consent; or use the Site for unlawful actions. SMC reserves the right to take necessary action against any individual/group/organization involved in any such malpractices, as per the court of law. However, the choice to take action or not lies with SMC."],
+        ["Accessing the Website", "Any user of the Website is not encouraged to use robots or any automated devices or programs to download, save, reproduce, or distribute the content available in the Website.", "The user of this site must take precautions to ensure that the process which he/she employs for accessing this Site does not expose him/her to the risk of viruses or other form of interference which may cause damage to the user's own system. SMC shall not be responsible for any interference or damage caused to a user’s computer system that occurs in connection with the user’s access to this Website or any linked Website.", "SMC shall not be responsible for any kind of damage that affects a user directly or indirectly caused by the use of or access of complete or part of any information given in this Website."],
+        ["Registration", "On submitting the details in the Enquiry form or any other form in the smart-2024.com Website, a user agrees to:", ["Make his/her contact details available to SMC.", "Be contacted by SMC through telephonic calls, e-mails or SMS regarding any education related information.", "Receive e-mails and SMS regarding latest activities at SMC, admission related details and any other education related details."], "However, SMC reserves the right to make decisions on contacting a user."],
+        ["User Information: Privacy Policy", "A user may voluntarily provide his/her personal information, such as name, e-mail address, contact number, and interest towards our services to receive further information about the service of his/her interest. Any such personal information provided is purely given with utmost conscious and self-interest, and is not provided on compulsion. By such an act, a user agrees to receive the required information through an e-mail, text message or a phone call from the officials of SMART Media College.", "Submitting any forms shall deemed to be considered that the user has read and understood the terms and conditions of the Website."],
+        ["Information Security", "SMC ensures that it will prevent any unauthorized access to the information collected online. Any personal information provided in the SMC Website will not be shared with/sold to/rented to any third party."],
+        ["Usage of Information Provided", "The information provided by a user may be used for:", ["Internal record keeping", "Improving our products and services", "Customizing the Website", "Contacting the user for any market research purpose or to inform about any new product/service or any other education related details"]],
+        ["Cookies", "We use cookies to analyze about our Web traffic in order to identify the Web pages that are highly accessed and those that are not accessed commonly. We use this analyzed information solely for the purpose of customizing our Website and to improve usability. We assure that the cookies do not provide access to any user system or user information, other than the ones explicitly provided by the user to us.", "If a user wants to decline the use of cookies, he/she can make the respective settings in the browser."],
+        ["Access to Other Websites", "This Website may provide links to other Websites, which may include third party Websites. When a user intends to access such links, this Website’s ‘Terms and Conditions’ and ‘Privacy Policy’ will no longer be applicable. The user is responsible to read through the Terms and Conditions and Privacy Policy of the respective third party Website before any user action."],
+        ["Disclaimer", "The terms, such as ‘we’, ‘us’, ‘our’ and ‘SMC’ cited in this content refers to SMART Media College. The terms and conditions given here apply to the use of this Website. By using this Website, a user agrees to these terms and conditions. If a user does not accept any part of the terms and conditions, he/she is advised to refrain from using this Website.", "Note: All the terms and conditions given are subject to change without any prior notice. Users are advised to check the terms and conditions on a regular basis. If you find any abusive content or plagiarized content in this Website, please report the same to mail@smartmediacollege.com. The reported content will be validated and if found abusive/plagiarized, it will be removed within 48 working hours."]];
+        const PT = [["Key terms", "The following is a summary of the key terms of this service:", "Payment(s) through this Service may only be made with a Credit Card, Debit card or Net Banking. Before using this Service, it is recommended that the user shall make necessary enquiry about the charges or fees payable against the Credit/Debit card used from Credit Card or the Debit Card service provider i.e. the respective Bank.", "The credit card information supplied at the time of using the service is processed by the payment gateway of the service provider and is not supplied to SMC. It is the sole responsibility of the User of the service to ensure that the information entered in the relevant fields are correct. It is recommended that you take and retain a copy of the transaction for record keeping purposes, which might assist in resolution of any disputes that may arise out or usage of the service The Applicant agrees, understands and confirms that his/ her personal data including without limitation details relating to debit card/ credit card/net banking transmitted over the Internet may be susceptible to misuse, hacking, theft and/ or fraud and that SMC or the Payment Service Provider(s) have no control over such matters.", "The service is provided using a payment gateway service provider through a secure website. However, neither the payment gateway service provider nor the SMC gives any assurance, that the information so provided online by a user is secured or may be read or intercepted by a third party. SMC does not accept or assume any liability in the event of such unauthorized interception, hacking or other unauthorized access to information provided by a user of the service.", "SMC and/or the Payment Service Providers shall not be liable for any inaccuracy, error or delay in, or omission of any data, information or message, or the transmission or delivery of any such data, information or message; or any loss or damage arising from or occasioned by any such inaccuracy, error, delay or omission, non-performance or interruption in any such data, information or message.", "Under no circumstances shall the SMC and/or the Payment Service Providers, its employees, directors, and its third party agents involved in processing, delivering or managing the Services, be liable for any direct, indirect, incidental, special or consequential damages, or any damages whatsoever, including punitive or exemplary arising out of or in any way connected with the provision of or any inadequacy or deficiency in the provision of the Services or resulting from unauthorized access or alteration of transmissions of data or arising from suspension or termination of the Service.", "The Applicant agrees that SMC or any of its employees will not be held liable By the Applicant for any loss or damages arising from your use of, or reliance upon the information contained on the Website, or any failure to comply with these Terms and Conditions where such failure is due to circumstance beyond SMC’s reasonable control."],
+        ["Debit/Credit Card, Bank Account Details", "The Applicant agrees that the debit/credit card details provided by him/ her for use of the aforesaid Service(s) must be correct and accurate and that the Applicant shall not use a Debit/ credit card, that is not lawfully owned by him/ her or the use of which is not authorized by the lawful owner thereof. The Applicant further agrees and undertakes to Provide correct and valid debit/credit card details. The Applicant may pay his/ her application/initial fees to SMC by using a debit/credit card or through online banking account. The Applicant warrants, agrees and confirms that when he/ she initiates a payment transaction and/or issues an online payment instruction and provides his/ her card / bank details:", ["The Applicant is fully and lawfully entitled to use such credit / debit card, bank account for such transactions:", "The Applicant is responsible to ensure that the card/ bank account details provided by him/ her are accurate:", "The Applicant authorizes debit of the nominated card/ bank account for the Payment of fees selected by such Applicant along with the applicable Fees.", "The Applicant is responsible to ensure that sufficient credit is available on the nominated card/ bank account at the time of making the payment to permit the Payment of the dues payable or fees dues selected by the Applicant inclusive of the applicable Fee."]],
+        ["No warranty", "No warranty, representation or guarantee, express or implied, is given by the SMC in respect of the operation of the service."],
+        ["Disclaimer and Limitation of liability", "SMC does not accept liability for any damage, loss, cost (including legal costs), expenses, indirect losses or consequential damage of any kind which may be suffered or incurred by the User from the use of this service."],
+        ["Governing law", "These terms and conditions are governed by the laws of India and the competent courts at Thrissur shall have exclusive jurisdiction."],
+        ["Dispute Resolution", "Any dispute arising in relation to the terms and conditions will be submitted to a sole arbitrator appointed by SMC under the provisions of the Arbitration and Conciliation Act, 1996 and rules framed there under. The venue of Arbitration shall be at Thrissur."],
+        ["Refund/Cancellation Policy", "Fees once paid will not be refunded under any circumstances."],
+        ["Privacy Policy", "In General parent / guardian / student may browse this website for obtaining any data or information. However, in order to access the classified information, one needs to use the credentials provided as a Parent / Guardian / Staff / Student user.", "The information provided by the user on this website shall be kept confidential and shall not be shared with anyone. The DATA will neither be made accessible to third parties nor transferred in any form or manner unless required by law.", "SMC may share your personal information with our bankers for clearing necessary fees payments. This information shall be strictly up to the legal permissible limit and not exceeding.", "Online Fee Payment system purpose to provide flexibility and conform to its continuing Student by offering option to pay online using various payment methods.", "It is sole responsibility of student to pick online payment option. SMC do not recommend/ prefer/promote any particular method.", "If payment is made by means of a card that you do not personally own, the permission of the card owner must always be obtained to make payments using the card. In using the system you confirm that you have such permission.", "Information related to payments using debit or credit card is not accessed or stored by the Institute.", "No Warranty: The information and materials contained in this site including, graphics, links or other items are provided as on “As Is” and “As Available” basis by the Institute which organized and tries to provide information accurately and expressly disclaims liability for error or omission in this information and materials. No warranty of any kind, implied, express or statutory shall be given by the Institute shall not be limited to the warranty of fitness for a particular purpose and freedom from computer virus is given in conjunction with the information and materials.", "Limitation of Liability: In no event, Institute will be liable for any damage direct or indirect losses or expenses arising in connection with site or use thereof inability to use by any person delay of operation or transaction, computer virus etc."],
+        ["Security", "All payment details which are entered through this payment gateway are encrypted when the Student, or third party making payment, enters them. The site is secure and uses 128-bit encryption to offer secure communications by encrypting all data to and from the site SMC shall not be liable for any failure by the Student or third party making payment of Fees to properly protect data from being seen on their screen by other persons or otherwise obtained by such other persons, during the Online Payment process or in respect of any omission to provide accurate information in the Course of the Online Payment Process."],
+        ["Variations to the Terms and Conditions", "The SMC reserves the right to vary these Terms and Conditions from time to time and the current version will be that published on this website, without any prior intimation or information or notice to the payee, in any form. We reserve the right to decline the acceptance of an online payment if your account is in default for any reason. SMC may also make additions/deletions/alteration to the services offered, at its sole discretion. We reserve the right to withdraw the service at any time at its discretion. We retain the right to change the terms and conditions for Online Fees Payments, without any prior notice."]];
+        const R = s => s.map(x => `<h3>${x[0]}</h3>` + x.slice(1).map(b => Array.isArray(b) ? li(b) : `<p>${b}</p>`).join("")).join("");
+        const pv = P.find(x => x[0] === "privacy"); pv[2] = "Built · text supplied by college";
+        pv[4] = `<details class="lg" open><summary>1. Terms and Conditions (General T&amp;C)</summary><p>The following are the terms and conditions that govern the use of SMART Media College’s Website (www.smartmediacollege.com). Any user accessing this Website is subject to the terms and conditions and any other applicable law.</p>${R(GT)}</details><details class="lg" open><summary>2. Payment Gateway T &amp; C (Online Payment)</summary><p>These terms and conditions apply to the User who uses the Online Services provided for any payment made to the Smart Media College (SMC). Kindly read these terms and conditions carefully. By authorizing a payment to SMC through any online payment service, it would be treated as a deemed acceptance to these terms and conditions. SMC reserves all the rights to amend these terms and conditions at any time without giving prior notice. It is the responsibility of the User to have read the terms and conditions before using the Service.</p>${R(PT)}</details>`;
+        const card = c => `<a class="card" href="#/course/${c.id}"><div class="thumb" data-k="${c.k}" style="background:linear-gradient(135deg,${c.g})">DEMO IMAGE</div><div class="b"><span class="tag">${c.s}</span><h3>${c.n}</h3><p>${c.d.slice(0, 95)}…</p></div></a>`;
+        const $ = i => document.getElementById(i);
+        fillHome(); $("disc").innerHTML = C.slice(1, 5).map(card).join(""); $("feat").innerHTML = C.slice(0, 5).map(card).join(""); $("all").innerHTML = C.map(card).join("");
+        $("stories").innerHTML = T.map(t => `<div class="card quote"><p>${t[2]}</p><span class="av">${t[0][0]}</span><b>${t[0]}</b><br><small style="color:var(--muted)">${t[1]}</small></div>`).join("");
+        function route() {
+            const h = location.hash.replace("#/", "") || ""; const [p, id] = h.split("/");
+            document.querySelectorAll(".view").forEach(v => v.classList.remove("on"));
+            let v = {"": "home", courses: "courses", verify: "verify", contact: "contact", course: "course", page: "page", status: "status"}[p] || "home";
+            if (v === "page") {const g = P.find(x => x[0] === id); if (!g) v = "status"; else $("pdet").innerHTML = `<span class="tag">${g[2]}</span><h2>${g[1]}</h2>${g[4] || `<div class="note">This page's content has not been migrated into the redesign yet.</div>`}<p><a class="btn" target="_blank" rel="noopener" href="${g[3]}">View current live page ↗</a></p>`}
+            if (v === "status") {
+                const r = [["Home", "#/", "Built"], ["All Courses", "#/courses", "Built"], ...C.map(c => [c.n, "#/course/" + c.id, "Built · details pending"]), ...P.map(x => [x[1], "#/page/" + x[0], x[2]]), ["Certificate Verification", "#/verify", "Built · links to official verifier"], ["Contact", "#/contact", "Built · mailto only, no backend"]];
+                $("sdet").innerHTML = `<h2>Page implementation status</h2><p class="sub">Every page found in the site navigation. All share one set of colour tokens.</p><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font:14px Arial">${r.map(x => `<tr style="border-bottom:1px solid var(--line)"><td style="padding:8px"><a href="${x[1]}">${x[0]}</a></td><td style="padding:8px;color:var(--muted)">${x[2]}</td></tr>`).join("")}</table></div><div class="note">Not found on the live site, so not built: Admissions, Scholarship eligibility, FAQs, Gallery, News &amp; Events and Sitemap pages. Login is not rebuilt, since no working auth backend was available. Colours are sampled from a screenshot of the live site.</div>`
+            }
+            if (v === "course") {
+                const c = C.find(x => x.id === id); if (!c) {v = "courses"} else {
+                    $("cdet").innerHTML = `<a href="#/courses">← All courses</a><div class="thumb" data-k="${c.k}" style="background:linear-gradient(135deg,${c.g});border-radius:16px;min-height:220px;margin:16px 0">DEMO IMAGE</div><span class="tag">${c.s}</span><h2>${c.n}</h2><p>${c.d}</p>
+${extra(c.id)}
+<a class="btn" href="${c.ext || "https://smart-2026.com/"}" target="_blank" rel="noopener">${c.ext ? "Course details ↗" : "Apply on smart-2027.com ↗"}</a> <a class="btn" style="background:var(--brand);color:#fff" href="#/contact">Enquire</a>`
+                }
+            }
+            document.querySelectorAll(".thumb[data-k]").forEach(t => {if (!t.querySelector("svg")) t.insertAdjacentHTML("afterbegin", art(t.dataset.k))});
+            $("v-" + v).classList.add("on"); scrollTo({top: 0, behavior: "instant"}); reveal()
+        }
+        const pg = $("pg"), hd = document.querySelector("header");
+        addEventListener("scroll", () => {hd.classList.toggle("scrolled", scrollY > 8); const m = document.documentElement.scrollHeight - innerHeight; pg.style.width = (m > 0 ? scrollY / m * 100 : 0) + "%"}, {passive: true});
+        const RM = matchMedia("(prefers-reduced-motion:reduce)").matches;
+        function count(el) {const n = +el.dataset.n, s = el.dataset.s || "", t0 = performance.now(); (function f(t) {const k = Math.min(1, (t - t0) / 1300), v = Math.round(n * (1 - Math.pow(1 - k, 3))); el.textContent = v.toLocaleString("en-US") + s; if (k < 1) requestAnimationFrame(f)})(t0)}
+        const io = !RM && "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => {if (e.isIntersecting) {e.target.classList.add("in"); if (e.target.dataset.n) count(e.target); io.unobserve(e.target)} }), {threshold: .12}) : null;
+        function reveal() {if (!io) return; document.querySelectorAll(".view.on .card,.view.on section h2,.view.on .sub,.view.on .stat>div,.view.on .cta,.view.on .note,.view.on details.lg,.view.on .asym>*,.view.on blockquote").forEach((el, i) => {el.classList.remove("in"); el.classList.add("rv"); el.style.setProperty("--d", (i % 4) * .08 + "s"); io.observe(el)}); document.querySelectorAll(".view.on b[data-n]").forEach(b => {b.textContent = "0" + (b.dataset.s || ""); io.observe(b)})}
+        document.addEventListener("click", e => {const b = e.target.closest(".dd>button"); document.querySelectorAll(".dd.open").forEach(d => {if (!b || d !== b.parentNode) d.classList.remove("open")}); if (b) b.parentNode.classList.toggle("open")});
+        addEventListener("hashchange", route); route();
+        $("send").onclick = () => {
+            const n = $("n").value.trim(), p = $("p").value.trim(), m = $("m").value.trim();
+            const e = $("e").value.trim(), sj = $("s").value.trim(); if (!n || !/^\S+@\S+\.\S+$/.test(e) || !sj || !/^[+\d][\d\s-]{7,}$/.test(p) || !m) {$("err").textContent = "Please complete every field with a valid email and contact number."; return }
+            $("err").textContent = ""; location.href = "mailto:mail@smartmediacollege.com?subject=" + encodeURIComponent(sj) + "&body=" + encodeURIComponent(m + "\n\nName: " + n + "\nEmail: " + e + "\nContact: " + p)
+        };
+    </script>
+
+    <script>
+    /* Responsive menu: hamburger toggle for tablet and phone */
+    (function () {
+        const hd = document.querySelector("header"), nb = document.getElementById("nb"), nav = document.getElementById("mainnav");
+        function closeMenu() { hd.classList.remove("open"); nb.setAttribute("aria-expanded", "false"); nb.setAttribute("aria-label", "Open menu"); document.querySelectorAll(".dd.open").forEach(d => d.classList.remove("open")) }
+        nb.addEventListener("click", () => { const o = hd.classList.toggle("open"); nb.setAttribute("aria-expanded", String(o)); nb.setAttribute("aria-label", o ? "Close menu" : "Open menu") });
+        nav.addEventListener("click", e => { if (e.target.closest("a")) closeMenu() });
+        addEventListener("hashchange", closeMenu);
+        addEventListener("resize", () => { if (innerWidth > 1080) closeMenu() });
+        document.addEventListener("keydown", e => { if (e.key === "Escape") closeMenu() });
+    })();
+    </script>
+</body>
+
+</html>
