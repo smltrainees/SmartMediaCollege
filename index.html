@@ -729,7 +729,7 @@
         section { padding: clamp(40px, 7vw, 64px) 0 }
         .cta { padding: clamp(24px, 5vw, 44px) }
         details.lg { padding: 6px clamp(14px, 3vw, 20px) }
-        .dd:nth-of-type(4) .m { left: auto; right: -12px }
+        .dd:nth-of-type(4) .m, .dd:nth-of-type(5) .m { left: auto; right: -12px }
         .nb { display: none; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; padding: 0; flex-direction: column; align-items: center; justify-content: center; gap: 5px }
         .nb span { display: block; width: 20px; height: 2px; background: var(--text); border-radius: 2px; transition: transform .25s, opacity .2s }
         header.open .nb span:nth-child(1) { transform: translateY(7px) rotate(45deg) }
@@ -759,7 +759,7 @@
             .dd.open .m { max-height: 420px; opacity: 1; visibility: visible; padding-bottom: 6px; transition: max-height .35s cubic-bezier(.2, .7, .2, 1), opacity .3s ease .05s, padding .25s, visibility 0s }
             .dd > button:after { display: inline-block; transition: transform .3s ease }
             .dd.open > button:after { transform: rotate(180deg) }
-            .dd:nth-of-type(4) .m { right: auto }
+            .dd:nth-of-type(4) .m, .dd:nth-of-type(5) .m { right: auto }
         }
         @media (max-width: 900px) {
             .asym { grid-template-columns: 1fr }
@@ -809,14 +809,53 @@
         @keyframes lift { from { transform: scaleY(1) } to { transform: scaleY(0) } }
         #cur { position: fixed; left: 0; top: 0; width: 26px; height: 26px; border: 2px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 80; opacity: 0; transition: width .2s, height .2s, background .2s, opacity .2s }
         #cur.big { width: 48px; height: 48px; background: #ffbb1033 }
-        .wa { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); z-index: 45; width: 58px; height: 58px; border-radius: 50%; background: #25d366; display: grid; place-items: center; box-shadow: 0 6px 18px #0004; transition: transform .2s, box-shadow .2s }
-        .wa:before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: #25d366; opacity: .5; z-index: -1; animation: pulse 2.4s ease-out infinite }
-        .wa:hover { transform: scale(1.1); box-shadow: 0 10px 24px #0005 }
-        .wa svg { width: 32px; height: 32px }
-        @keyframes pulse { to { transform: scale(1.7); opacity: 0 } }
-        @media (max-width: 720px) { .wa { bottom: calc(76px + env(safe-area-inset-bottom)); width: 54px; height: 54px } }
         @media (hover: hover) and (pointer: fine) { .btn.mag:hover { transform: translate(var(--mx, 0px), calc(var(--my, 0px) - 2px)) } }
         @media (max-width: 720px) { .sb { display: flex } body { padding-bottom: calc(66px + env(safe-area-inset-bottom)) } }
+    
+        /* ===== V3: reel hero, showcase, 3D viewer, make-something, tour, logo wall ===== */
+        .reel { position: absolute; inset: 0; overflow: hidden; opacity: .3; pointer-events: none; display: flex; flex-direction: column; justify-content: center; gap: 14px }
+        .reel .row { display: flex; gap: 14px; width: max-content; animation: slide 45s linear infinite }
+        .reel .row:nth-child(2) { animation-direction: reverse; animation-duration: 60s }
+        .reel .fr { width: 230px; aspect-ratio: 16/10; border-radius: 10px; border: 2px solid #fff4; position: relative; flex: none }
+        .reel.paused .row { animation-play-state: paused }
+        @keyframes slide { to { transform: translateX(-50%) } }
+        .hero > .wrap { position: relative; z-index: 1 }
+        .rbtn { position: absolute; right: 16px; bottom: 16px; z-index: 2; border: 1.5px solid #fff8; background: #0006; color: #fff; border-radius: 999px; padding: 8px 14px; font: 600 12px Arial; cursor: pointer }
+        .mq { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent) }
+        .mq .t { display: flex; gap: 14px; width: max-content; animation: slide 38s linear infinite }
+        .mq:hover .t { animation-play-state: paused }
+        .chip { padding: 14px 26px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); font: 800 18px Arial; white-space: nowrap; color: var(--brand) }
+        @media (prefers-reduced-motion: reduce) { .mq { overflow-x: auto; -webkit-mask-image: none; mask-image: none } }
+        .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 22px }
+        .chips button { padding: 8px 16px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: 600 14px Arial; cursor: pointer; transition: background .2s, border-color .2s }
+        .chips button.on { background: var(--accent); border-color: var(--accent); color: #111 }
+        dialog.pm { border: 0; border-radius: 18px; padding: 0; width: min(720px, 94vw); background: var(--surface); color: var(--text); box-shadow: 0 30px 80px #0008; overflow: hidden }
+        dialog.pm::backdrop { background: #000a; backdrop-filter: blur(4px) }
+        dialog.pm[open] { animation: viewIn .3s ease both }
+        .pm .thumb { aspect-ratio: 16/9; width: 100% }
+        .pm .in { padding: 16px 22px 22px }
+        .pm .nv { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; z-index: 2 }
+        .pm .nv button { width: 38px; height: 38px; border-radius: 50%; border: 0; background: #000a; color: #fff; font-size: 18px; cursor: pointer }
+        .stage { height: min(62vh, 440px); display: grid; place-items: center; perspective: 1000px; border-radius: 18px; background: radial-gradient(circle at 50% 40%, var(--brand), var(--brand-2)); overflow: hidden; touch-action: none; cursor: grab; position: relative }
+        .stage:active { cursor: grabbing }
+        .world { transform-style: preserve-3d; position: relative; width: 0; height: 0 }
+        .bx { position: absolute; transform-style: preserve-3d }
+        .bx i { position: absolute; left: 50%; top: 50%; backface-visibility: hidden }
+        .pano { height: min(58vh, 380px); border-radius: 18px; overflow: hidden; position: relative; cursor: grab; touch-action: pan-y; background-repeat: repeat-x; background-size: auto 100%; border: 1px solid var(--line) }
+        .pano:active { cursor: grabbing }
+        .pano .cap { position: absolute; left: 14px; bottom: 14px; background: #000b; color: #fff; padding: 8px 14px; border-radius: 10px; font: 600 14px Arial }
+        .dots { display: flex; gap: 8px; justify-content: center; margin: 16px 0 }
+        .dots button { width: 12px; height: 12px; border-radius: 50%; border: 0; background: var(--line); cursor: pointer; padding: 0 }
+        .dots button.on { background: var(--accent); transform: scale(1.3) }
+        .mk { font: 800 clamp(40px, 11vw, 100px)/1.05 Arial; text-align: center; padding: 28px 8px; border-radius: 18px; min-height: 200px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; background: #0f172a; overflow: hidden }
+        .mk span { display: inline-block; animation: pop .6s cubic-bezier(.2, .9, .3, 1.4) backwards, bob 2.6s ease-in-out infinite; animation-delay: calc(var(--i) * 70ms), calc(var(--i) * 120ms + .6s) }
+        .mk.gold span { background: linear-gradient(180deg, #ffd266, #ff7a18); -webkit-background-clip: text; background-clip: text; color: transparent }
+        .mk.neon span { color: #7df9ff; text-shadow: 0 0 10px #7df9ff, 0 0 30px #3b82f6 }
+        .mk.film span { color: #fff; -webkit-text-stroke: 2px #c70206; text-shadow: 4px 4px 0 #c70206 }
+        @keyframes pop { from { transform: translateY(40px) scale(.3); opacity: 0 } }
+        @keyframes bob { 50% { transform: translateY(-8px) } }
+        .row2 { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 14px 0 }
+        .row2 .btn { font-family: Arial }
     </style>
 </head>
 
@@ -857,6 +896,7 @@
                     <div class="m"><a href="#/page/plus">Smart Exchange</a><a href="#/page/excel">Smart Excel</a><a
                             href="#/page/connect">Smart Connect</a><a href="#/page/care">Smart Care</a></div>
                 </div>
+                <div class="dd"><button type="button">Explore</button><div class="m"><a href="#/tour">Virtual Campus Tour</a><a href="#/showcase">Student Showcase</a><a href="#/viewer">3D Model Viewer</a><a href="#/make">Make Something</a></div></div>
                 <a href="https://online.pubhtml5.com/doylj/ikqu/" target="_blank" rel="noopener">Smart Voices</a><a
                     href="#/contact">Contact</a>
             <a class="btn nav-apply" href="https://smart-2026.com/" target="_blank" rel="noopener">Apply Now</a></nav>
@@ -871,7 +911,7 @@
 
     <main>
         <div class="view" id="v-home">
-            <div class="hero">
+            <div class="hero"><!-- SHOWREEL: JS adds a demo reel layer here. To use real video, add <video class="reelv" autoplay muted loop playsinline src="YOUR_REEL.mp4"></video> inside .reel -->
                 <div class="wrap"><span class="tag" style="color:var(--accent)">27th Year Anniversary · Thrissur,
                         Kerala</span>
                     <h1>Turn Your Creativity Into Your Career.</h1>
@@ -918,6 +958,8 @@
 
             <section style="background:var(--surface)"><div class="wrap asym" style="align-items:center"><div><span class="tag">Not sure where to start?</span><h2>Find the course that fits you.</h2><p class="sub">Answer five quick questions and get a suggested program. It takes about a minute.</p><a class="btn" href="#/quiz">Take the course quiz</a></div><div class="card quote"><p><b>Draw, edit, code or build?</b></p><p>Your answers point you to Graphic Design, Web Design, VFX, Interior Design, PDMA or the BSc in Visual Communication.</p></div></div></section>
             <section><div class="wrap"><span class="tag">See the transformation</span><h2>From raw idea to finished render.</h2><p class="sub">Drag the handle to compare. Demo artwork for now. Replace it with a real before and after from a student project.</p><div class="ba" id="ba"><div class="lay a"><svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="bgA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#033e82"/><stop offset="1" stop-color="#ffbb10"/></linearGradient></defs><rect width="160" height="90" fill="url(#bgA)"/><circle cx="80" cy="50" r="40" fill="#fff" opacity=".12"/><ellipse cx="80" cy="84" rx="30" ry="4" fill="#000" opacity=".25"/><path d="M80 18L112 34L80 50L48 34Z" fill="#ffd266"/><path d="M48 34L80 50V82L48 66Z" fill="#05599e"/><path d="M80 50L112 34V66L80 82Z" fill="#022c5e"/></svg><span class="lb r">FINAL RENDER</span></div><div class="lay b"><svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><pattern id="gr" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M8 0H0V8" fill="none" stroke="#243350" stroke-width=".3"/></pattern></defs><rect width="160" height="90" fill="#141c2b"/><rect width="160" height="90" fill="url(#gr)"/><g fill="none" stroke="#7aa6d8" stroke-width=".8" stroke-dasharray="2 1.5"><path d="M80 18L112 34V66L80 82L48 66V34Z"/><path d="M48 34L80 50L112 34M80 50V82"/></g></svg><span class="lb l">RAW SKETCH</span></div><div class="hd"><i>&#8596;</i></div><input type="range" min="0" max="100" value="50" aria-label="Drag to compare the raw sketch with the final render"></div></div></section>
+            <section><div class="wrap"><span class="tag">Where our students work</span><h2>Studios that hire Smart graduates.</h2><p class="sub">Company names shown as text from student testimonials. Replace with logos you have permission to display.</p><div class="mq"><div class="t" id="logos"></div></div></div></section>
+            <section style="background:var(--surface)"><div class="wrap"><h2>Explore Smart</h2><div class="grid"><a class="card" href="#/tour"><div class="thumb" data-k="cam" style="background:linear-gradient(135deg,#033e82,#05599e)">VIRTUAL TOUR</div><div class="b"><h3>Virtual campus tour</h3><p>Look around labs and studios.</p></div></a><a class="card" href="#/showcase"><div class="thumb" data-k="gfx" style="background:linear-gradient(135deg,#05599e,#ffbb10)">SHOWCASE</div><div class="b"><h3>Student showcase</h3><p>Filter work by discipline.</p></div></a><a class="card" href="#/viewer"><div class="thumb" data-k="pdma" style="background:linear-gradient(135deg,#033e82,#ffbb10)">3D VIEWER</div><div class="b"><h3>3D model viewer</h3><p>Rotate a character in 3D.</p></div></a><a class="card" href="#/make"><div class="thumb" data-k="star" style="background:linear-gradient(135deg,#05599e,#dba531)">MAKE SOMETHING</div><div class="b"><h3>Make something</h3><p>Animate your name and share it.</p></div></a></div></div></section>
             <section>
                 <div class="wrap">
                     <h2>Student projects</h2>
@@ -981,6 +1023,10 @@
             </section>
         </div>
         <div class="view" id="v-quiz"><section><div class="wrap" id="qz" style="max-width:760px"></div></section></div>
+        <div class="view" id="v-showcase"><section><div class="wrap"><span class="tag">Student showcase</span><h2>Work from our students.</h2><p class="sub">Demo pieces for now. Each will carry the real student's name and batch.</p><div class="chips" id="chips"></div><div class="grid" id="wall"></div></div></section></div>
+        <div class="view" id="v-viewer"><section><div class="wrap"><span class="tag">3D model viewer</span><h2>Spin it, zoom it.</h2><p class="sub">Drag to rotate, scroll or pinch to zoom. Demo character built in code; swap in a student's exported model later.</p><div class="stage" id="stage" tabindex="0" aria-label="3D character. Drag to rotate."><div class="world" id="world"></div></div><div class="row2"><button class="btn" id="vAuto" type="button">Pause spin</button><button class="btn" id="vSkin" type="button" style="background:var(--surface);border:1.5px solid var(--line);color:var(--text)">Change colours</button><button class="btn" id="vReset" type="button" style="background:var(--surface);border:1.5px solid var(--line);color:var(--text)">Reset</button></div></div></section></div>
+        <div class="view" id="v-make"><section><div class="wrap" style="max-width:820px"><span class="tag">Make something</span><h2>See your name in motion.</h2><p class="sub">Type a name, pick a style, then share it.</p><div class="mk gold" id="mk" aria-live="polite"></div><label for="mkIn">Your name</label><input id="mkIn" maxlength="14" value="Your Name" autocomplete="off"><div class="row2" id="mkSt"><div class="chips" style="margin:0"><button type="button" data-s="gold" class="on">Gold</button><button type="button" data-s="neon">Neon</button><button type="button" data-s="film">Film</button></div></div><div class="row2"><a class="btn" id="mkWa" target="_blank" rel="noopener" href="#">Share on WhatsApp</a><button class="btn" id="mkShare" type="button" style="background:var(--surface);border:1.5px solid var(--line);color:var(--text)">Share&hellip;</button><button class="btn" id="mkImg" type="button" style="background:var(--surface);border:1.5px solid var(--line);color:var(--text)">Create image</button></div><p id="mkMsg" class="note" style="display:none"></p><img id="mkOut" alt="Your styled name" style="display:none;width:100%;max-width:420px;border-radius:14px;margin-top:10px"></div></section></div>
+        <div class="view" id="v-tour"><section><div class="wrap"><span class="tag">Virtual campus tour</span><h2>Walk through the campus.</h2><p class="sub">Drag to look around, or use the buttons to move between stations. Demo scenes for now. Replace with real 360&deg; or photo panoramas.</p><div class="pano" id="pano" tabindex="0" aria-label="Campus panorama. Drag or use arrow keys."><div class="cap" id="cap"></div></div><div class="dots" id="dots"></div><div class="row2" style="justify-content:center"><button class="btn" id="tPrev" type="button" style="background:var(--surface);border:1.5px solid var(--line);color:var(--text)">&larr; Previous</button><button class="btn" id="tNext" type="button">Next station &rarr;</button></div></div></section></div>
         <div class="view" id="v-status">
             <section>
                 <div class="wrap" id="sdet"></div>
@@ -1155,7 +1201,7 @@
         function route() {
             const h = location.hash.replace("#/", "") || ""; const [p, id] = h.split("/");
             document.querySelectorAll(".view").forEach(v => v.classList.remove("on"));
-            let v = {"": "home", courses: "courses", verify: "verify", contact: "contact", course: "course", page: "page", status: "status", quiz: "quiz"}[p] || "home";
+            let v = {"": "home", courses: "courses", verify: "verify", contact: "contact", course: "course", page: "page", status: "status", quiz: "quiz", showcase: "showcase", viewer: "viewer", make: "make", tour: "tour"}[p] || "home";
             if (v === "quiz" && typeof quizStart === "function") quizStart();
             if (v === "page") {const g = P.find(x => x[0] === id); if (!g) v = "status"; else $("pdet").innerHTML = `<span class="tag">${g[2]}</span><h2>${g[1]}</h2>${g[4] || `<div class="note">This page's content has not been migrated into the redesign yet.</div>`}<p><a class="btn" target="_blank" rel="noopener" href="${g[3]}">View current live page ↗</a></p>`}
             if (v === "status") {
@@ -1200,8 +1246,7 @@ ${extra(c.id)}
     })();
     </script>
 
-    <div class="sb"><a href="https://smart-2026.com/" target="_blank" rel="noopener" style="background:var(--accent);color:#111">Apply</a><a href="tel:+919946998888" style="background:var(--brand);color:#fff">Call</a></div>
-    <a class="wa" href="https://wa.me/919946998888?text=Hi%20Smart%20Media%20College%2C%20I%20would%20like%20to%20know%20more%20about%20your%20courses" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/><path fill="#25d366" d="M16.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.1l-.9 1.1c-.2.2-.3.2-.6.1-1.7-.8-2.8-1.5-3.9-3.3-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5l-.9-2.1c-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.8.8-1 1.7-.9 2.6.3 1.5 1.1 2.8 2.2 3.9 1.6 1.7 3.2 2.5 5 3 .6.2 1.2.1 1.7-.1.6-.3 1.1-.9 1.3-1.5.1-.3.1-.6 0-.7-.1-.1-.3-.2-.6-.3z"/></svg></a>
+    <div class="sb"><a href="https://smart-2026.com/" target="_blank" rel="noopener" style="background:var(--accent);color:#111">Apply</a><a href="https://wa.me/919946998888?text=Hi%20Smart%20Media%20College%2C%20I%20would%20like%20to%20know%20more%20about%20your%20courses" target="_blank" rel="noopener" style="background:#25d366;color:#08331a">WhatsApp</a><a href="tel:+919946998888" style="background:var(--brand);color:#fff">Call</a></div>
     <div id="wipe" aria-hidden="true"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>
     <script>
     /* V2: course quiz */
@@ -1244,6 +1289,78 @@ ${extra(c.id)}
         document.addEventListener("mouseleave", () => c.style.opacity = 0);
         (function f() { cx += (x - cx) * .18; cy += (y - cy) * .18; c.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`; requestAnimationFrame(f) })();
     }
+    </script>
+
+    <script>
+    /* V3 */
+    (function () {
+        const ce = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h !== undefined) e.innerHTML = h; return e };
+        /* 1. Showreel hero (demo) */
+        const hero = document.querySelector(".hero"), reel = ce("div", "reel"), K = ["pdma", "gfx", "vfx", "web", "int", "edu", "cam", "star"];
+        for (let r = 0; r < 3; r++) { let h = ""; for (let n = 0; n < 2; n++) K.forEach((k, i) => { h += `<div class="fr" data-k="${K[(i + r * 3) % 8]}" style="background:linear-gradient(135deg,${PAL[(i + r) % 4]})"></div>` }); reel.appendChild(ce("div", "row", h)) }
+        reel.querySelectorAll(".fr").forEach(f => f.insertAdjacentHTML("afterbegin", art(f.dataset.k)));
+        hero.prepend(reel);
+        const rb = ce("button", "rbtn", "&#10074;&#10074; Pause demo reel"); rb.type = "button";
+        rb.onclick = () => { const p = reel.classList.toggle("paused"); rb.innerHTML = p ? "&#9654; Play demo reel" : "&#10074;&#10074; Pause demo reel" };
+        hero.appendChild(rb);
+        /* 2. Logo wall (names as text) */
+        const L = ["Xentrix Studios", "MPC Film", "Webros Animations", "PhilmCGI Animation Studio", "Garlic Media Group", "PYCAS Design Innovations", "H&C Publications"];
+        $("logos").innerHTML = [...L, ...L].map(n => `<div class="chip">${n}</div>`).join("");
+        /* 3. Student showcase + pop-up viewer */
+        const CATS = ["Animation", "VFX", "Graphic", "Web", "Interior"], KM = { Animation: "pdma", VFX: "vfx", Graphic: "gfx", Web: "web", Interior: "int" };
+        const W = Array.from({ length: 12 }, (_, i) => { const c = CATS[i % 5]; return { c, t: `Demo ${c} piece ${Math.floor(i / 5) + 1}`, s: "Student Name", b: "Batch XX", g: PAL[i % 4] } });
+        let cur = "All", list = W, idx = 0;
+        const dlg = ce("dialog", "pm"); dlg.setAttribute("aria-label", "Project viewer"); document.body.appendChild(dlg);
+        function show(i) { idx = (i + list.length) % list.length; const w = list[idx]; dlg.innerHTML = `<div style="position:relative"><div class="thumb" data-k="${KM[w.c]}" style="background:linear-gradient(135deg,${w.g})">DEMO</div><div class="nv"><button type="button" aria-label="Previous" data-d="-1">&#8249;</button><button type="button" aria-label="Next" data-d="1">&#8250;</button><button type="button" aria-label="Close" data-d="x">&times;</button></div></div><div class="in"><span class="tag">${w.c}</span><h3 style="margin:4px 0">${w.t}</h3><p style="margin:0;color:var(--muted)">${w.s} &middot; ${w.b}</p></div>`; dlg.querySelector(".thumb").insertAdjacentHTML("afterbegin", art(KM[w.c])); dlg.querySelectorAll(".nv button").forEach(b => b.onclick = () => b.dataset.d === "x" ? dlg.close() : show(idx + +b.dataset.d)); if (!dlg.open) dlg.showModal() }
+        dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close() });
+        dlg.addEventListener("keydown", e => { if (e.key === "ArrowRight") show(idx + 1); if (e.key === "ArrowLeft") show(idx - 1) });
+        function wall() { list = cur === "All" ? W : W.filter(w => w.c === cur); $("wall").innerHTML = list.map((w, i) => `<button type="button" class="card" data-i="${i}" style="text-align:left;cursor:pointer;padding:0;color:inherit;font:inherit"><div class="thumb" data-k="${KM[w.c]}" style="background:linear-gradient(135deg,${w.g})">DEMO</div><div class="b"><span class="tag">${w.c}</span><h3>${w.t}</h3><p>${w.s} &middot; ${w.b}</p></div></button>`).join(""); $("wall").querySelectorAll(".thumb").forEach(t => t.insertAdjacentHTML("afterbegin", art(t.dataset.k))); $("wall").querySelectorAll(".card").forEach(c => c.onclick = () => show(+c.dataset.i)) }
+        $("chips").innerHTML = ["All", ...CATS].map(c => `<button type="button" class="${c === "All" ? "on" : ""}">${c}</button>`).join("");
+        $("chips").querySelectorAll("button").forEach(b => b.onclick = () => { cur = b.textContent; $("chips").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); wall() });
+        wall();
+        /* 4. 3D viewer (pure CSS 3D, no library) */
+        const world = $("world"), SK = [["#ffbb10", "#05599e", "#033e82", "#1b1b1b"], ["#7df9ff", "#7c3aed", "#4c1d95", "#111"], ["#e5e7eb", "#6b7280", "#374151", "#111"]]; let sk = 0;
+        const SH = [1, .85, .8, .7, 1.15, .6];
+        function box(w, h, d, x, y, z, ci) { const e = ce("div", "bx"); e.dataset.c = ci; e.style.transform = `translate3d(${x}px,${y}px,${z}px)`; const F = [[w, h, `translateZ(${d / 2}px)`], [d, h, `rotateY(90deg) translateZ(${w / 2}px)`], [d, h, `rotateY(-90deg) translateZ(${w / 2}px)`], [w, h, `rotateY(180deg) translateZ(${d / 2}px)`], [w, d, `rotateX(90deg) translateZ(${h / 2}px)`], [w, d, `rotateX(-90deg) translateZ(${h / 2}px)`]]; F.forEach((f, k) => { const i = ce("i"); i.style.cssText = `width:${f[0]}px;height:${f[1]}px;margin:${-f[1] / 2}px 0 0 ${-f[0] / 2}px;transform:${f[2]};filter:brightness(${SH[k]})`; e.appendChild(i) }); world.appendChild(e) }
+        box(56, 56, 56, 0, -110, 0, 0); box(10, 10, 4, -13, -112, 29, 3); box(10, 10, 4, 13, -112, 29, 3); box(30, 6, 4, 0, -92, 29, 3); box(4, 22, 4, 0, -150, 0, 2); box(10, 10, 10, 0, -166, 0, 0);
+        box(64, 70, 36, 0, -40, 0, 1); box(18, 62, 18, -42, -42, 0, 2); box(18, 62, 18, 42, -42, 0, 2); box(24, 60, 24, -17, 25, 0, 2); box(24, 60, 24, 17, 25, 0, 2); box(28, 8, 34, -17, 58, 4, 3); box(28, 8, 34, 17, 58, 4, 3);
+        function paint() { world.querySelectorAll(".bx").forEach(b => b.querySelectorAll("i").forEach(i => i.style.background = SK[sk][b.dataset.c])) } paint();
+        let ry = -25, rx = -12, sc = 1, auto = true, drag = false, lx = 0, ly = 0; const st = $("stage");
+        st.addEventListener("pointerdown", e => { drag = true; lx = e.clientX; ly = e.clientY; st.setPointerCapture(e.pointerId) });
+        st.addEventListener("pointermove", e => { if (!drag) return; ry += (e.clientX - lx) * .6; rx = Math.max(-60, Math.min(60, rx - (e.clientY - ly) * .5)); lx = e.clientX; ly = e.clientY });
+        st.addEventListener("pointerup", () => drag = false); st.addEventListener("pointercancel", () => drag = false);
+        st.addEventListener("wheel", e => { e.preventDefault(); sc = Math.max(.6, Math.min(1.8, sc - e.deltaY * .001)) }, { passive: false });
+        st.addEventListener("keydown", e => { if (e.key === "ArrowLeft") ry -= 12; if (e.key === "ArrowRight") ry += 12; if (e.key === "ArrowUp") rx = Math.min(60, rx + 8); if (e.key === "ArrowDown") rx = Math.max(-60, rx - 8) });
+        $("vAuto").onclick = e => { auto = !auto; e.target.textContent = auto ? "Pause spin" : "Start spin" };
+        $("vSkin").onclick = () => { sk = (sk + 1) % SK.length; paint() };
+        $("vReset").onclick = () => { ry = -25; rx = -12; sc = 1 };
+        (function f() { if (auto && !drag && !RM) ry += .5; world.style.transform = `scale(${sc}) rotateX(${rx}deg) rotateY(${ry}deg)`; requestAnimationFrame(f) })();
+        /* 5. Make something */
+        let ms = "gold"; const mk = $("mk"), inp = $("mkIn");
+        function mkRender() { const t = (inp.value.trim() || "Smart").slice(0, 14); mk.className = "mk " + ms; mk.innerHTML = [...t].map((c, i) => c === " " ? "<span style='--i:" + i + "'>&nbsp;</span>" : `<span style="--i:${i}">${c.replace(/[<>&]/g, "")}</span>`).join(""); const msg = `Look what I made at Smart Media College: ${t}`; $("mkWa").href = "https://wa.me/?text=" + encodeURIComponent(msg + " " + location.href.split("#")[0]) }
+        inp.addEventListener("input", mkRender); mkRender();
+        $("mkSt").querySelectorAll("button").forEach(b => b.onclick = () => { ms = b.dataset.s; $("mkSt").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); mkRender() });
+        function note(t) { const m = $("mkMsg"); m.textContent = t; m.style.display = "block" }
+        $("mkShare").onclick = async () => { const t = inp.value.trim() || "Smart"; try { if (navigator.share) await navigator.share({ title: "Smart Media College", text: "Look what I made at Smart Media College: " + t, url: location.href.split("#")[0] }); else { await navigator.clipboard.writeText(location.href.split("#")[0]); note("Link copied.") } } catch (e) { note("Sharing isn't available here. Use the WhatsApp button.") } };
+        $("mkImg").onclick = () => { const t = (inp.value.trim() || "Smart").slice(0, 14), c = ce("canvas"); c.width = c.height = 1080; const x = c.getContext("2d"); x.fillStyle = "#0f172a"; x.fillRect(0, 0, 1080, 1080); const g = x.createLinearGradient(0, 0, 1080, 1080); g.addColorStop(0, "#033e82"); g.addColorStop(1, "#05599e"); x.globalAlpha = .55; x.fillStyle = g; x.fillRect(0, 0, 1080, 1080); x.globalAlpha = 1; let fs = 220; x.font = `800 ${fs}px Arial`; while (x.measureText(t).width > 940 && fs > 40) { fs -= 8; x.font = `800 ${fs}px Arial` } x.textAlign = "center"; x.textBaseline = "middle"; if (ms === "neon") { x.shadowColor = "#7df9ff"; x.shadowBlur = 40; x.fillStyle = "#7df9ff" } else if (ms === "film") { x.lineWidth = 10; x.strokeStyle = "#c70206"; x.strokeText(t, 540, 540); x.fillStyle = "#fff" } else { const q = x.createLinearGradient(0, 420, 0, 660); q.addColorStop(0, "#ffd266"); q.addColorStop(1, "#ff7a18"); x.fillStyle = q } x.fillText(t, 540, 520); x.shadowBlur = 0; x.fillStyle = "#fff"; x.font = "600 34px Arial"; x.fillText("Made at Smart Media College", 540, 1020); const o = $("mkOut"); o.src = c.toDataURL("image/png"); o.style.display = "block"; note("Press and hold the image (phone) or right-click it (desktop) to save.") };
+        /* 6. Virtual campus tour (demo panorama) */
+        const Z = [["Reception", "#f59e0b", "#7c4a03"], ["Computer Lab", "#1e3a8a", "#0f172a"], ["Green Screen Studio", "#15803d", "#064e3b"], ["Classroom", "#b91c1c", "#450a0a"], ["Library", "#92400e", "#451a03"], ["Editing Suite", "#6d28d9", "#2e1065"]];
+        let sv = '<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="400" viewBox="0 0 2400 400">';
+        Z.forEach((z, i) => { const x = i * 400; sv += `<rect x="${x}" width="400" height="400" fill="${z[1]}"/><rect x="${x}" y="300" width="400" height="100" fill="${z[2]}"/>`; for (let r = 0; r < 2; r++) for (let c = 0; c < 4; c++) { const px = x + 40 + c * 85, py = 130 + r * 85; sv += i === 4 ? `<rect x="${px}" y="${py - 20}" width="70" height="70" fill="#fff" opacity=".18"/>` : i === 2 ? "" : `<rect x="${px}" y="${py}" width="62" height="42" rx="4" fill="#fff" opacity=".85"/><rect x="${px + 24}" y="${py + 42}" width="14" height="18" fill="#fff" opacity=".5"/>` } sv += `<text x="${x + 200}" y="60" text-anchor="middle" font-family="Arial" font-weight="700" font-size="26" fill="#fff" opacity=".9">${z[0]} (demo)</text>` });
+        sv += "</svg>";
+        const pano = $("pano"); pano.style.backgroundImage = `url("data:image/svg+xml,${encodeURIComponent(sv)}")`;
+        let off = 0, tgt = null, td = false, tx = 0, tcur = 0, tauto = !RM;
+        const sw = () => pano.clientHeight * 6, zw = () => pano.clientHeight;
+        function tgo(i) { tcur = (i + 6) % 6; tauto = false; tgt = -(tcur * zw()) + (pano.clientWidth - zw()) / 2; let d = (tgt - off) % sw(); if (d > sw() / 2) d -= sw(); if (d < -sw() / 2) d += sw(); tgt = off + d; cap() }
+        function cap() { $("cap").textContent = `Station ${tcur + 1} of 6: ${Z[tcur][0]} (demo)`; $("dots").querySelectorAll("button").forEach((b, i) => b.classList.toggle("on", i === tcur)) }
+        $("dots").innerHTML = Z.map((z, i) => `<button type="button" aria-label="${z[0]}"></button>`).join(""); $("dots").querySelectorAll("button").forEach((b, i) => b.onclick = () => tgo(i));
+        $("tNext").onclick = () => tgo(tcur + 1); $("tPrev").onclick = () => tgo(tcur - 1); cap();
+        pano.addEventListener("pointerdown", e => { td = true; tx = e.clientX; tauto = false; tgt = null; pano.setPointerCapture(e.pointerId) });
+        pano.addEventListener("pointermove", e => { if (!td) return; off += e.clientX - tx; tx = e.clientX });
+        pano.addEventListener("pointerup", () => td = false); pano.addEventListener("pointercancel", () => td = false);
+        pano.addEventListener("keydown", e => { if (e.key === "ArrowRight") tgo(tcur + 1); if (e.key === "ArrowLeft") tgo(tcur - 1) });
+        (function f() { if (!pano.clientHeight) { requestAnimationFrame(f); return } if (tgt !== null) { off += (tgt - off) * .12; if (Math.abs(tgt - off) < .5) tgt = null } else if (tauto && !td) off -= .35; if (!td && tgt === null) { const z = Math.round(((pano.clientWidth - zw()) / 2 - off) / zw()); tcur = ((z % 6) + 6) % 6; cap() } pano.style.backgroundPosition = off + "px 0"; requestAnimationFrame(f) })();
+    })();
     </script>
 </body>
 
