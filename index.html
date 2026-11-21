@@ -2419,6 +2419,39 @@
             .wa { width: 54px; height: 54px }
         }
         /* ===== END SMAC CHATBOT ===== */
+
+        /* ===== BACK-TO-TOP + BROCHURE ENQUIRY POPUP (added). Delete from here to the END marker to remove their styling. ===== */
+        html { scrollbar-gutter: stable }
+        html:has(dialog[open]) { overflow: hidden }
+        .totop { position: fixed; left: max(16px, env(safe-area-inset-left)); bottom: max(20px, env(safe-area-inset-bottom)); z-index: 46; width: 48px; height: 48px; padding: 0; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .28); background: var(--brand-2); color: #fff; display: grid; place-items: center; cursor: pointer; box-shadow: 0 6px 18px rgba(3, 62, 130, .35); opacity: 0; visibility: hidden; transform: translateY(14px); transition: opacity .3s, transform .3s, background .2s, visibility 0s linear .3s }
+        .totop.show { opacity: 1; visibility: visible; transform: none; transition-delay: 0s }
+        .totop.show:hover { background: var(--brand); transform: translateY(-3px) }
+        .totop:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px }
+        .totop svg { width: 22px; height: 22px }
+        @media (max-width: 760px) { .totop { width: 44px; height: 44px; bottom: calc(76px + env(safe-area-inset-bottom)) } }
+        @media (prefers-reduced-motion: reduce) { .totop, .totop.show { transition: none } }
+
+        dialog.enq { width: min(440px, 92vw); max-height: 92dvh; overflow: auto }
+        .enq form, .enq .enq-ok { padding: 28px 26px 26px }
+        .enq h2 { margin: 0 0 6px; font-size: 1.5rem; padding-right: 36px }
+        .enq .enq-s { margin: 0 0 18px; color: var(--muted); font-size: .9375rem }
+        .enq label { display: block; margin: 14px 0 6px; font-weight: 600; font-size: .9375rem }
+        .enq label i { color: #c70206; font-style: normal; margin-left: 2px }
+        .enq input { display: block; width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--text); font: inherit; font-size: 1rem; transition: border-color .2s, box-shadow .2s }
+        .enq input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(5, 89, 158, .22) }
+        .enq input[aria-invalid="true"] { border-color: #d93025 }
+        .enq .enq-err { min-height: 1.1em; margin-top: 5px; color: #d93025; font-size: .8125rem }
+        .enq .enq-fail { margin: 12px 0 0; color: #d93025; font-size: .875rem }
+        .enq .enq-go { width: 100%; margin-top: 14px; justify-content: center; font-size: 1rem; border: 0; cursor: pointer }
+        .enq .enq-go[disabled] { opacity: .7; cursor: progress }
+        .enq .enq-x { position: absolute; top: 12px; right: 12px; z-index: 2; width: 38px; height: 38px; padding: 0; border-radius: 50%; border: 0; background: var(--bg); color: var(--text); font-size: 22px; line-height: 1; cursor: pointer }
+        .enq .enq-x:hover { background: var(--line) }
+        :root[data-theme="dark"] .enq .enq-err, :root[data-theme="dark"] .enq .enq-fail { color: #ff7b72 }
+        :root[data-theme="dark"] .enq input[aria-invalid="true"] { border-color: #ff7b72 }
+        .enq .enq-ok { text-align: center }
+        .enq .enq-ok .tick { width: 56px; height: 56px; margin: 0 auto 14px; border-radius: 50%; background: #e6f4ea; color: #188038; display: grid; place-items: center; font-size: 28px }
+        .enq .enq-ok p { margin: 0 auto 18px; color: var(--muted) }
+        /* ===== END BACK-TO-TOP + ENQUIRY ===== */
     </style>
 </head>
 
@@ -2426,7 +2459,7 @@
     <div id="pg"></div>
     <div class="bar apply-bar"><span class="ab-t">Applications open for 2027</span><span class="ab-l"><a href="https://smart-2026.com/" target="_blank" rel="noopener" title="Scholarship applications for the 2027 intake" aria-label="Apply: Smart 2027"><span class="ab-pre">Apply: </span>Smart 2027</a><a href="#/contact" id="apply-slp" title="Apply for the SLP 2027 program" aria-label="Apply: SLP 2027"><span class="ab-pre">Apply: </span>SLP 2027</a><a href="#/contact" id="apply-isp" title="Apply for the ISP 2027 program" aria-label="Apply: ISP 2027"><span class="ab-pre">Apply: </span>ISP 2027</a></span></div>
     <div class="util">
-        <div class="wrap"><span><a href="#/verify">Certificate Verification</a> | <a href="#/contact">Brochure enquiry</a></span></div>
+        <div class="wrap"><span><a href="#/verify">Certificate Verification</a> | <a href="#/contact" data-enquiry>Brochure enquiry</a></span></div>
     </div>
     <header>
         <div class="wrap"><a class="logo" href="#/" aria-label="Smart Media College home"><img
@@ -3257,6 +3290,139 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 })();
+    </script>
+
+    <!-- BACK-TO-TOP + BROCHURE ENQUIRY (added) -->
+    <button class="totop" id="totop" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button>
+
+    <dialog class="pm enq" id="enq" aria-labelledby="enq-h">
+        <button class="enq-x" id="enq-x" type="button" aria-label="Close">&times;</button>
+        <form id="enq-form" novalidate>
+            <h2 id="enq-h">Request our brochure</h2>
+            <p class="enq-s">Enter your details and our admission team will get in touch with you.</p>
+            <label for="enq-name">Name<i aria-hidden="true">*</i></label>
+            <input id="enq-name" name="name" type="text" autocomplete="name" maxlength="80" placeholder="Your full name" required aria-describedby="enq-name-e">
+            <div class="enq-err" id="enq-name-e" role="alert"></div>
+            <label for="enq-phone">Contact No<i aria-hidden="true">*</i></label>
+            <input id="enq-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="18" placeholder="e.g. 98765 43210" required aria-describedby="enq-phone-e">
+            <div class="enq-err" id="enq-phone-e" role="alert"></div>
+            <button class="btn enq-go" id="enq-go" type="submit">Submit</button>
+            <p class="enq-fail" id="enq-fail" role="alert" hidden></p>
+        </form>
+        <div class="enq-ok" id="enq-ok" hidden>
+            <div class="tick" aria-hidden="true">&#10003;</div>
+            <h2 style="padding:0">Thank you!</h2>
+            <p id="enq-ok-msg"></p>
+            <button class="btn" id="enq-done" type="button" style="border:0;cursor:pointer">Close</button>
+        </div>
+    </dialog>
+
+    <script>
+    (function () {
+        /* ---------- Back to top ---------- */
+        const totop = document.getElementById("totop");
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        let ticking = false, rafId = 0;
+
+        function updateTop() { ticking = false; totop.classList.toggle("show", window.scrollY > 300); }
+        window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(updateTop); } }, { passive: true });
+        updateTop();
+
+        const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+        function stopGlide() {
+            cancelAnimationFrame(rafId);
+            ["wheel", "touchstart", "keydown"].forEach((ev) => window.removeEventListener(ev, stopGlide));
+        }
+        totop.addEventListener("click", () => {
+            const from = window.scrollY;
+            if (from <= 0) return;
+            if (reduce) { window.scrollTo({ top: 0, behavior: "instant" }); return; }
+            stopGlide();
+            const dur = Math.min(1100, Math.max(450, Math.sqrt(from) * 14));   // longer pages scroll a little longer, capped
+            const t0 = performance.now();
+            ["wheel", "touchstart", "keydown"].forEach((ev) => window.addEventListener(ev, stopGlide, { passive: true }));  // user input cancels it
+            (function step(now) {
+                const p = Math.min(1, (now - t0) / dur);
+                window.scrollTo({ top: from * (1 - ease(p)), behavior: "instant" });
+                if (p < 1) rafId = requestAnimationFrame(step); else stopGlide();
+            })(t0);
+        });
+
+        /* ---------- Brochure enquiry popup ---------- */
+        // To receive submissions, put your form/webhook URL here. It gets a POST with JSON {name, phone, source}.
+        const ENQUIRY_ENDPOINT = "";
+
+        const dlg = document.getElementById("enq"), form = document.getElementById("enq-form"), ok = document.getElementById("enq-ok");
+        const nameEl = document.getElementById("enq-name"), phoneEl = document.getElementById("enq-phone");
+        const nameErr = document.getElementById("enq-name-e"), phoneErr = document.getElementById("enq-phone-e");
+        const go = document.getElementById("enq-go"), fail = document.getElementById("enq-fail");
+        const touchLike = () => window.matchMedia("(hover: none), (pointer: coarse)").matches || window.innerWidth <= 760;
+
+        function reset() {
+            form.reset(); ok.hidden = true; form.hidden = false; fail.hidden = true;
+            [nameEl, phoneEl].forEach((el) => el.removeAttribute("aria-invalid"));
+            nameErr.textContent = phoneErr.textContent = "";
+            go.disabled = false; go.textContent = "Submit";
+        }
+        function openEnquiry() {
+            reset();
+            if (!dlg.open) dlg.showModal();
+            if (!touchLike()) nameEl.focus();            // no keyboard pop-up on phones
+            else { dlg.setAttribute("tabindex", "-1"); dlg.focus(); }
+        }
+        document.addEventListener("click", (e) => {
+            const a = e.target.closest("[data-enquiry]");
+            if (!a) return;
+            e.preventDefault();
+            openEnquiry();
+        });
+        const closeEnquiry = () => dlg.close();
+        document.getElementById("enq-x").addEventListener("click", closeEnquiry);
+        document.getElementById("enq-done").addEventListener("click", closeEnquiry);
+        dlg.addEventListener("click", (e) => { if (e.target === dlg) closeEnquiry(); });   // click on the dark backdrop
+        dlg.addEventListener("close", reset);
+
+        function checkName(v) {
+            if (!v) return "Please enter your name.";
+            if (!/^[\p{L}\p{M}][\p{L}\p{M} .'\u2019-]{1,79}$/u.test(v)) return "Please enter a valid name.";
+            return "";
+        }
+        function checkPhone(v) {
+            if (!v) return "Please enter your contact number.";
+            const n = v.replace(/[\s()-]/g, "");
+            const indian = /^(\+?91|0)?[6-9]\d{9}$/.test(n), intl = /^\+\d{8,15}$/.test(n);
+            return indian || intl ? "" : "Enter a valid mobile number (10 digits).";
+        }
+        function mark(el, errEl, msg) {
+            errEl.textContent = msg;
+            if (msg) el.setAttribute("aria-invalid", "true"); else el.removeAttribute("aria-invalid");
+        }
+        nameEl.addEventListener("input", () => { if (nameEl.getAttribute("aria-invalid")) mark(nameEl, nameErr, checkName(nameEl.value.trim())); });
+        phoneEl.addEventListener("input", () => { if (phoneEl.getAttribute("aria-invalid")) mark(phoneEl, phoneErr, checkPhone(phoneEl.value.trim())); });
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = nameEl.value.trim().replace(/\s+/g, " "), phone = phoneEl.value.trim();
+            const ne = checkName(name), pe = checkPhone(phone);
+            mark(nameEl, nameErr, ne); mark(phoneEl, phoneErr, pe);
+            if (ne || pe) { (ne ? nameEl : phoneEl).focus(); return; }
+
+            go.disabled = true; go.textContent = "Sending…"; fail.hidden = true;
+            try {
+                if (ENQUIRY_ENDPOINT) {
+                    const res = await fetch(ENQUIRY_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ name, phone, source: "Brochure enquiry" }) });
+                    if (!res.ok) throw new Error("HTTP " + res.status);
+                }
+                document.dispatchEvent(new CustomEvent("smc:enquiry", { detail: { name, phone } }));
+                document.getElementById("enq-ok-msg").textContent = "Thanks, " + name + ". Our team will contact you on " + phone + " soon.";
+                form.hidden = true; ok.hidden = false;
+            } catch (err) {
+                fail.textContent = "Sorry, we could not send your details. Please call +91 99469 98888.";
+                fail.hidden = false; go.disabled = false; go.textContent = "Submit";
+            }
+        });
+    })();
     </script>
 </body>
 
