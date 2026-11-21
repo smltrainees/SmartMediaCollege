@@ -1589,6 +1589,12 @@
         .tt:focus-visible { outline-color: var(--brand) }
         .apply-bar a { background: var(--brand-2); color: #fff; font-weight: 700; font-size: .75rem }
         .apply-bar a:hover, .apply-bar a:focus-visible { background: var(--brand) }
+        /* small screens: keep the three apply buttons on one line (drop the "Apply:" prefix) */
+        @media (max-width: 480px) {
+            .apply-bar .ab-l { flex-wrap: nowrap; gap: 6px }
+            .apply-bar .ab-pre { display: none }
+            .apply-bar a { padding: 6px 12px; white-space: nowrap }
+        }
         /* application programs */
         .prog { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 28px; text-align: left }
         .prog-i { background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .16); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px }
@@ -2411,7 +2417,7 @@
 
 <body>
     <div id="pg"></div>
-    <div class="bar apply-bar"><span class="ab-t">Applications open for 2027</span><span class="ab-l"><a href="https://smart-2026.com/" target="_blank" rel="noopener" title="Scholarship applications for the 2027 intake">Apply: Smart 2027</a><a href="#/contact" id="apply-slp" title="Apply for the SLP 2027 program">Apply: SLP 2027</a><a href="#/contact" id="apply-isp" title="Apply for the ISP 2027 program">Apply: ISP 2027</a></span></div>
+    <div class="bar apply-bar"><span class="ab-t">Applications open for 2027</span><span class="ab-l"><a href="https://smart-2026.com/" target="_blank" rel="noopener" title="Scholarship applications for the 2027 intake" aria-label="Apply: Smart 2027"><span class="ab-pre">Apply: </span>Smart 2027</a><a href="#/contact" id="apply-slp" title="Apply for the SLP 2027 program" aria-label="Apply: SLP 2027"><span class="ab-pre">Apply: </span>SLP 2027</a><a href="#/contact" id="apply-isp" title="Apply for the ISP 2027 program" aria-label="Apply: ISP 2027"><span class="ab-pre">Apply: </span>ISP 2027</a></span></div>
     <div class="util">
         <div class="wrap"><span><a href="https://www.facebook.com/smartmediacollege">Facebook</a><a
                     href="https://www.youtube.com/c/SmartMediaCollege">YouTube</a><a
