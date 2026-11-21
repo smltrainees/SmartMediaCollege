@@ -1595,6 +1595,13 @@
             .apply-bar .ab-pre { display: none }
             .apply-bar a { padding: 6px 12px; white-space: nowrap }
         }
+        /* top bar: single group on the right (centred on phones, see the 720px rule above) */
+        @media (min-width: 721px) { .util .wrap { justify-content: flex-end } }
+        .util a:first-child { margin-right: 6px }
+        .util a:last-child { margin-left: 6px; margin-right: 0 }
+        /* touch screens force min-height 44px; keep the round theme button round and the menu button square */
+        .tt, .nb { flex: none }
+        @media (pointer: coarse) { .tt, .nb { min-width: 44px } }
         /* application programs */
         .prog { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 28px; text-align: left }
         .prog-i { background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .16); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px }
@@ -2419,12 +2426,7 @@
     <div id="pg"></div>
     <div class="bar apply-bar"><span class="ab-t">Applications open for 2027</span><span class="ab-l"><a href="https://smart-2026.com/" target="_blank" rel="noopener" title="Scholarship applications for the 2027 intake" aria-label="Apply: Smart 2027"><span class="ab-pre">Apply: </span>Smart 2027</a><a href="#/contact" id="apply-slp" title="Apply for the SLP 2027 program" aria-label="Apply: SLP 2027"><span class="ab-pre">Apply: </span>SLP 2027</a><a href="#/contact" id="apply-isp" title="Apply for the ISP 2027 program" aria-label="Apply: ISP 2027"><span class="ab-pre">Apply: </span>ISP 2027</a></span></div>
     <div class="util">
-        <div class="wrap"><span><a href="https://www.facebook.com/smartmediacollege">Facebook</a><a
-                    href="https://www.youtube.com/c/SmartMediaCollege">YouTube</a><a
-                    href="https://www.instagram.com/smartmediacollege">Instagram</a><a
-                    href="https://www.linkedin.com/company/smart-media-college/">LinkedIn</a></span><span>Helplines <a
-                    href="tel:+919946998888">+91 99469 98888</a>, <a href="tel:+918547998888">85479 98888</a> | <a
-                    href="#/verify">Certificate Verification</a> | <a href="#/contact">Brochure enquiry</a></span></div>
+        <div class="wrap"><span><a href="#/verify">Certificate Verification</a> | <a href="#/contact">Brochure enquiry</a></span></div>
     </div>
     <header>
         <div class="wrap"><a class="logo" href="#/" aria-label="Smart Media College home"><img
@@ -2694,6 +2696,7 @@
             <div class="grid">
                 <div>
                     <h4>Smart Media College</h4>Chicago Tower, Ikkanda Warrier Road, Thrissur 680001
+                    <h4 style="margin-top:16px">Helplines</h4><a href="tel:+919946998888">+91 99469 98888</a><a href="tel:+918547998888">+91 85479 98888</a>
                 </div>
                 <div>
                     <h4>Programs</h4><a href="#/courses">All courses</a><a href="https://smart-2026.com/"
