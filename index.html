@@ -2375,12 +2375,18 @@
         #ai-chatbot .ai-chat-window, #ai-chatbot .ai-chat-window.active { z-index: 48 }
         /* compact welcome block so the greeting shows without scrolling */
         #ai-chatbot .ai-chat-messages { padding: 14px 16px }
+        /* message icon */
+        #ai-chatbot svg.chat-ico { width: 1em; height: 1em; display: block; margin: 0 auto }
+        #ai-chatbot .smac-icon { display: flex; align-items: center; justify-content: center; font-size: 28px; line-height: 1 }
         /* tooltip: one line, centred beside the chatbot button */
         #ai-chatbot .smac-tooltip { right: calc(100% + 14px); top: 50%; bottom: auto; width: max-content; max-width: none; white-space: nowrap; transform: translate(12px, -50%) }
         #ai-chatbot .smac-tooltip.show { transform: translate(0, -50%) }
         @media (max-width: 360px) { #ai-chatbot .smac-tooltip { font-size: 11px; padding: 10px 30px 10px 12px } }
         /* scrolling stays inside the chat window */
         #ai-chatbot .ai-chat-window, #ai-chatbot .ai-chat-messages { overscroll-behavior: contain }
+        /* 1px of hidden overflow keeps the list a real scroll container even when it is short, so the page behind never takes over */
+        #ai-chatbot .ai-chat-messages { position: relative }
+        #ai-chatbot .ai-chat-messages::after { content: ""; position: absolute; left: 0; top: 0; width: 1px; height: calc(100% + 1px); visibility: hidden; pointer-events: none }
         #ai-chatbot .welcome-message { padding: 4px 5px 12px }
         #ai-chatbot .welcome-icon { font-size: 28px; line-height: 1.2; margin-bottom: 6px }
         #ai-chatbot .welcome-message h2 { font-size: 17px; margin: 0 0 4px }
@@ -2851,7 +2857,7 @@ ${extra(c.id)}
     <div class="sb"><a href="https://smart-2026.com/" target="_blank" rel="noopener"
             style="background:var(--accent);color:#111">Apply</a><a href="tel:+919946998888"
             style="background:var(--brand);color:#fff">Call</a></div>
-    <a class="wa" style="margin-bottom: 10px;"
+    <a class="wa"
         href="https://wa.me/919946998888?text=Hi%20Smart%20Media%20College%2C%20I%20would%20like%20to%20know%20more%20about%20your%20courses"
         target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24"
             aria-hidden="true">
@@ -2944,7 +2950,7 @@ ${extra(c.id)}
                 </div>
     
                 <button id="ai-chat-toggle" aria-label="Open Smac Assistant">
-                    <span class="smac-icon">✦</span>
+                    <span class="smac-icon"><svg class="chat-ico" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" aria-hidden="true"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM8 8.7a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6zM12 8.7a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6zM16 8.7a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z"/></svg></span>
                     <span class="smac-pulse"></span>
                 </button>
     
@@ -2955,7 +2961,7 @@ ${extra(c.id)}
     
                 <header class="ai-chat-header">
                     <div class="ai-brand">
-                        <div class="ai-logo">✦</div>
+                        <div class="ai-logo"><svg class="chat-ico" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" aria-hidden="true"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM8 8.7a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6zM12 8.7a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6zM16 8.7a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z"/></svg></div>
                         <div>
                             <h3>Smac Assistant</h3>
                             <p><span class="online-dot"></span> Online assistant</p>
@@ -2968,7 +2974,7 @@ ${extra(c.id)}
                 <main id="ai-chat-messages" class="ai-chat-messages">
     
                     <div class="welcome-message">
-                        <div class="welcome-icon">✦</div>
+                        <div class="welcome-icon"><svg class="chat-ico" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" aria-hidden="true"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM8 8.7a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6zM12 8.7a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6zM16 8.7a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z"/></svg></div>
                         <h2>How can I help you?</h2>
                         <p>Ask me anything about our website and services.</p>
                     </div>
@@ -3012,27 +3018,59 @@ const input = document.getElementById("ai-chat-input");
 const send = document.getElementById("ai-chat-send");
 const messages = document.getElementById("ai-chat-messages");
 
+// Phones/tablets: never auto-focus the text box (it would pop the keyboard up). Desktop keeps the auto-focus.
+const isTouchLike = () => window.matchMedia("(hover: none), (pointer: coarse)").matches || window.innerWidth <= 760;
+const focusInput = () => { if (!isTouchLike()) input.focus(); };
+
 // Open chatbot
 toggle.addEventListener("click", () => {
     windowChat.classList.add("active");
-    input.focus();
+    focusInput();
         messages.scrollTo({ top: messages.scrollHeight, behavior: "instant" });
 });
 
-// Scrolling anywhere over the chat window scrolls the chat, never the page behind it
+// Scrolling over the chat window never moves the page behind it.
+// The message list is plain native scrolling (no wheel listener, so it stays smooth); CSS keeps the page still.
+// Only the parts that cannot scroll (header, quick buttons, call button, input) forward the wheel to the list.
 const quickRow = windowChat.querySelector(".quick-questions");
-windowChat.addEventListener("wheel", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-        if (quickRow) quickRow.scrollLeft += e.deltaX;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let glideTarget = 0, glideFrame = 0;
+
+function glideStep() {
+    const diff = glideTarget - messages.scrollTop;
+    if (Math.abs(diff) < 1) {
+        messages.scrollTo({ top: glideTarget, behavior: "instant" });
+        glideFrame = 0;
         return;
     }
+    messages.scrollTo({ top: messages.scrollTop + Math.sign(diff) * Math.max(1, Math.abs(diff) * 0.22), behavior: "instant" });
+    glideFrame = requestAnimationFrame(glideStep);
+}
+
+function glideBy(dy) {
+    const max = messages.scrollHeight - messages.clientHeight;
+    const from = glideFrame ? glideTarget : messages.scrollTop;
+    glideTarget = Math.max(0, Math.min(max, from + dy));
+    if (reduceMotion) { messages.scrollTo({ top: glideTarget, behavior: "instant" }); return; }
+    if (!glideFrame) glideFrame = requestAnimationFrame(glideStep);
+}
+
+function forwardWheel(e) {
+    if (e.ctrlKey) return;                       // pinch-zoom gestures
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        if (!(quickRow && quickRow.contains(e.target))) e.preventDefault();   // sideways scroll only belongs to the quick-question row
+        return;
+    }
+    e.preventDefault();
     let dy = e.deltaY;
     if (e.deltaMode === 1) dy *= 16;
     else if (e.deltaMode === 2) dy *= messages.clientHeight;
-    messages.scrollBy({ top: dy, behavior: Math.abs(dy) < 50 ? "instant" : "smooth" });
-}, { passive: false });
+    glideBy(dy);
+}
+
+[...windowChat.children].filter((el) => el !== messages).forEach((el) => {
+    el.addEventListener("wheel", forwardWheel, { passive: false });
+});
 
 // Close chatbot
 close.addEventListener("click", () => {
@@ -3117,7 +3155,7 @@ function getBotResponse(message) {
 
 
 // Send message
-function sendMessage() {
+function sendMessage(fromOption = false) {
 
     const userMessage = input.value.trim();
 
@@ -3127,7 +3165,8 @@ function sendMessage() {
     addMessage(userMessage, "user-message");
 
     input.value = "";
-    input.focus();
+    if (fromOption) focusInput();   // option buttons: no keyboard on phones
+    else input.focus();             // typed message: keep the keyboard open so typing can continue
 
     // Show typing indicator
     const typing = document.createElement("div");
@@ -3150,7 +3189,7 @@ function sendMessage() {
 }
 
 // Send button
-send.addEventListener("click", sendMessage);
+send.addEventListener("click", () => sendMessage());
 
 // Enter key
 input.addEventListener("keydown", (event) => {
@@ -3167,7 +3206,7 @@ document.querySelectorAll(".quick-question").forEach(button => {
     button.addEventListener("click", () => {
 
         input.value = button.textContent;
-        sendMessage();
+        sendMessage(true);
 
     });
 
